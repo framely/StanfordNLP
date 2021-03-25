@@ -475,53 +475,16 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
       int nerIndex = orderedAnnotators.indexOf(Annotator.STANFORD_NER);
       orderedAnnotators.add(nerIndex + 1, STANFORD_REGEXNER);
     }
-    // (ensure coref is before openie)
-    if (orderedAnnotators.contains(Annotator.STANFORD_COREF) && orderedAnnotators.contains(STANFORD_OPENIE)) {
-      int maxIndex = Math.max(
-          orderedAnnotators.indexOf(STANFORD_OPENIE),
-          orderedAnnotators.indexOf(STANFORD_COREF)
-          );
-      if (Objects.equals(orderedAnnotators.get(maxIndex), STANFORD_OPENIE)) {
-        orderedAnnotators.add(maxIndex, STANFORD_COREF);
-        orderedAnnotators.remove(STANFORD_COREF);
-      } else {
-        orderedAnnotators.add(maxIndex + 1, STANFORD_OPENIE);
-        orderedAnnotators.remove(STANFORD_OPENIE);
-      }
-    }
+
 
     // Return
     return StringUtils.join(orderedAnnotators, ",");
   }
 
 
-  /**
-   * Check if we can construct an XML outputter.
-   *
-   * @return Whether we can construct an XML outputter.
-   */
-  private static boolean isXMLOutputPresent() {
-    try {
-      Class.forName("edu.stanford.nlp.pipeline.XMLOutputter");
-    } catch (ClassNotFoundException | NoClassDefFoundError ex) {
-      return false;
-    }
-    return true;
-  }
-
   //
   // AnnotatorPool construction support
   //
-
-  /**
-   * Call this if you are no longer using StanfordCoreNLP and want to
-   * release the memory associated with the annotators.
-   */
-  public static synchronized void clearAnnotatorPool() {
-    logger.warn("Clearing CoreNLP annotation pool; this should be unnecessary in production");
-    GLOBAL_ANNOTATOR_CACHE.clear();
-  }
-
 
   /**
    * This function defines the list of named annotators in CoreNLP, along with how to construct
@@ -543,24 +506,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     pool.put(STANFORD_GENDER, (props, impl) -> impl.gender(props, STANFORD_GENDER));
 
     pool.put(STANFORD_QUOTE, (props, impl) -> impl.quote(props));
-    return pool;
-  }
-
-
-  /**
-   * Construct the default annotator pool, and save it as the static annotator pool
-   * for CoreNLP.
-   *
-   * @see StanfordCoreNLP#constructAnnotatorPool(Properties, AnnotatorImplementations)
-   */
-  public static synchronized AnnotatorPool getDefaultAnnotatorPool(final Properties inputProps, final AnnotatorImplementations annotatorImplementation) {
-    // if the pool already exists reuse!
-    AnnotatorPool pool = AnnotatorPool.SINGLETON;
-    for (Map.Entry<String, BiFunction<Properties, AnnotatorImplementations, Annotator>> entry : getNamedAnnotators().entrySet()) {
-      AnnotatorSignature key = new AnnotatorSignature(entry.getKey(), PropertiesUtils.getSignature(entry.getKey(), inputProps));
-      pool.register(entry.getKey(), inputProps, GLOBAL_ANNOTATOR_CACHE.computeIfAbsent(key, (sig) -> Lazy.cache(() -> entry.getValue().apply(inputProps, annotatorImplementation))));
-    }
-    registerCustomAnnotators(pool, annotatorImplementation, inputProps);
     return pool;
   }
 
@@ -607,21 +552,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     return pool;
   }
 
-  public static synchronized Annotator getExistingAnnotator(String name) {
-    Optional<Annotator> annotator = GLOBAL_ANNOTATOR_CACHE.entrySet().stream()
-        .filter(entry -> name.equals(entry.getKey().name))
-        .map(entry -> Optional.ofNullable(entry.getValue().getIfDefined()))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .findFirst();
-    if (annotator.isPresent()) {
-      return annotator.get();
-    } else {
-      logger.error("Attempted to fetch annotator \"" + name +
-          "\" but the annotator pool does not store any such type!");
-      return null;
-    }
-  }
 
   /** Annotate the CoreDocument wrapper. **/
   public void annotate(CoreDocument document) {
@@ -667,16 +597,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
 
 
   /**
-   * Determines whether the parser annotator should default to
-   * producing binary trees.  Currently there is only one condition
-   * under which this is true: the sentiment annotator is used.
-   */
-  public static boolean usesBinaryTrees(Properties props) {
-    Set<String> annoNames = Generics.newHashSet(Arrays.asList(props.getProperty("annotators","").split("[, \t]+")));
-    return annoNames.contains(STANFORD_SENTIMENT);
-  }
-
-  /**
    * Runs the entire pipeline on the content of the given text passed in.
    * @param text The text to process
    * @return An Annotation object containing the output of all annotators
@@ -687,70 +607,10 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     return annotation;
   }
 
-  /**
-   * Runs the entire pipeline on the content of the given text passed in.
-   * @param text The text to process
-   * @return An Annotation object containing the output of all annotators
-   */
-  public CoreDocument processToCoreDocument(String text) {
-    return new CoreDocument(process(text));
-  }
-
   //
   // output and formatting methods (including XML-specific methods)
   //
 
-  /**
-   * Displays the output of all annotators in a format easily readable by people.
-   *
-   * @param annotation Contains the output of all annotators
-   * @param os The output stream
-   */
-  public void prettyPrint(Annotation annotation, OutputStream os) {
-    TextOutputter.prettyPrint(annotation, os, this);
-  }
-
-  /**
-   * Displays the output of all annotators in a format easily readable by people.
-   *
-   * @param annotation Contains the output of all annotators
-   * @param os The output stream
-   */
-  public void prettyPrint(Annotation annotation, PrintWriter os) {
-    TextOutputter.prettyPrint(annotation, os, this);
-  }
-
-  /**
-   * Wrapper around xmlPrint(Annotation, OutputStream).
-   * Added for backward compatibility.
-   *
-   * @param annotation The Annotation to print
-   * @param w The Writer to send the output to
-   * @throws IOException If any IO problem
-   */
-  public void xmlPrint(Annotation annotation, Writer w) throws IOException {
-    ByteArrayOutputStream os = new ByteArrayOutputStream();
-    xmlPrint(annotation, os); // this builds it as the encoding specified in the properties
-    w.write(os.toString(getEncoding()));
-    w.flush();
-  }
-
-  /**
-   * Displays the output of all annotators in XML format.
-   *
-   * @param annotation Contains the output of all annotators
-   * @param os The output stream
-   * @throws IOException If any IO problem
-   */
-  public void xmlPrint(Annotation annotation, OutputStream os) throws IOException {
-    try {
-      Class clazz = Class.forName("edu.stanford.nlp.pipeline.XMLOutputter");
-      Method method = clazz.getMethod("xmlPrint", Annotation.class, OutputStream.class, StanfordCoreNLP.class);
-      method.invoke(null, annotation, os, this);
-    } catch (NoSuchMethodException | IllegalAccessException | ClassNotFoundException | InvocationTargetException e) {
-      throw new RuntimeException(e);
-    }
-  }
 
   /**
    * Displays the output of all annotators in JSON format.
@@ -871,16 +731,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     os.println("\tIf annotator \"parse\" is defined:");
     os.println("\t\"parse.model\" - path towards the PCFG parser model");
 
-    /* XXX: unstable, do not use for now
-    os.println();
-    os.println("\tIf annotator \"srl\" is defined:");
-    os.println("\t\"srl.verb.args\" - path to the file listing verbs and their core arguments (\"verbs.core_args\")");
-    os.println("\t\"srl.model.id\" - path prefix for the role identification model (adds \".model.gz\" and \".fe\" to this prefix)");
-    os.println("\t\"srl.model.cls\" - path prefix for the role classification model (adds \".model.gz\" and \".fe\" to this prefix)");
-    os.println("\t\"srl.model.jic\" - path to the directory containing the joint model's \"model.gz\", \"fe\" and \"je\" files");
-    os.println("\t                  (if not specified, the joint model will not be used)");
-    */
-
     os.println();
     os.println("Command line properties:");
     os.println("\t\"file\" - run the pipeline on the content of this file, or on the content of the files in this directory");
@@ -976,7 +826,7 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
 
 
   /**
-   * Create an outputter to be passed into {@link StanfordCoreNLP#processFiles(String, Collection, int, Properties, BiConsumer, BiConsumer, OutputFormat, boolean)}.
+   * Create an outputter to be passed into {@link String, Collection, int, Properties, BiConsumer, BiConsumer, OutputFormat, boolean)}.
    *
    * @param properties The properties file to use.
    *
@@ -1059,13 +909,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     AnnotationOutputter.Options options = AnnotationOutputter.getOptions(properties);
     StanfordCoreNLP.OutputFormat outputFormat = StanfordCoreNLP.OutputFormat.valueOf(properties.getProperty("outputFormat", DEFAULT_OUTPUT_FORMAT).toUpperCase());
     processFiles(base, files, numThreads, properties, this::annotate, createOutputter(properties, options), outputFormat, clearPool, Optional.of(this), tim);
-  }
-
-  protected static void processFiles(String base, final Collection<File> files, int numThreads,
-                                     Properties properties, BiConsumer<Annotation, Consumer<Annotation>> annotate,
-                                     BiConsumer<Annotation, OutputStream> print,
-                                     OutputFormat outputFormat, boolean clearPool) throws IOException {
-    processFiles(base, files, numThreads, properties, annotate, print, outputFormat, clearPool, Optional.empty(), Optional.empty());
   }
 
   /**
@@ -1284,13 +1127,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     }
   }
 
-  public void processFiles(final Collection<File> files, int numThreads, boolean clearPool, Optional<Timing> tim) throws IOException {
-    processFiles(null, files, numThreads, clearPool, tim);
-  }
-
-  public void processFiles(final Collection<File> files, boolean clearPool, Optional<Timing> tim) throws IOException {
-    processFiles(files, 1, clearPool, tim);
-  }
 
   public void run() throws IOException {
     run(false);

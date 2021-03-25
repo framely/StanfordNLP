@@ -1,7 +1,6 @@
 package edu.stanford.nlp.tagger.util; 
 
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -236,8 +235,6 @@ public class CountClosedTags  {
   }
 
   public static void main(String[] args) throws Exception {
-    System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
-    System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8));
 
     Properties config = StringUtils.argsToProperties(args);
     checkArgs(config);

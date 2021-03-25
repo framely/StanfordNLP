@@ -110,14 +110,4 @@ public class Annotation extends ArrayCoreMap {
     this.set(CoreAnnotations.TokensAnnotation.class, tokens);
     this.set(CoreAnnotations.TextAnnotation.class, text.toString());
   }
-
-  // ==================
-  // Old Deprecated API. This shouldn't be used. It's currently only used in old RTE code.
-  // ==================
-
-  @Deprecated
-  public Annotation() {
-    super(12);
-  }
-
 }

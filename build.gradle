@@ -2,36 +2,18 @@
 // Stanford CoreNLP build specification for 
 // Gradle.
 //
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'application'
+
+plugins {
+    id "idea"
+    id "java"
+}
+
 
 // Gradle java plugin
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
 
-version = '4.2.0'
-
-// Gradle application plugin
-mainClassName = "edu.stanford.nlp.pipeline.StanfordCoreNLP"
-
-// Jar creation
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'Stanford CoreNLP',
-                   'Implementation-Version': version,
-		   'Main-Class': 'edu.stanford.nlp.pipeline.StanfordCoreNLP'
-    }
-}
-
-uploadArchives {
-    repositories {
-       flatDir {
-           dirs 'repos'
-       }
-    }
-}
 
 // Add src-extra build target
 sourceSets {
@@ -50,20 +32,4 @@ task listDeps {
 dependencies {
   compile fileTree(dir: 'lib', include: '*.jar')
   testCompile fileTree(dir: 'liblocal', include: '*.jar')
-}
-
-// Eclipse plugin setup
-eclipse {
-  classpath {
-    defaultOutputDir = file('bin/')
-    file {
-      beforeMerged { classpath ->
-        classpath.entries.removeAll { entry -> entry.kind == 'lib' }
-      }
-    }
-  }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.2'
 }

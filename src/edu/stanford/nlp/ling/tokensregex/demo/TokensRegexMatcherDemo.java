@@ -22,7 +22,7 @@ public class TokensRegexMatcherDemo {
 
   public static void main(String[] args) {
     StanfordCoreNLP pipeline = new StanfordCoreNLP(
-            PropertiesUtils.asProperties("annotators", "tokenize,ssplit,pos,lemma,ner"));
+            PropertiesUtils.asProperties("annotators", "tokenize,ssplit"));
     Annotation annotation = new Annotation("Casey is 21. Sally Atkinson's age is 30.");
     pipeline.annotate(annotation);
     List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
@@ -37,6 +37,7 @@ public class TokensRegexMatcherDemo {
     MultiPatternMatcher<CoreMap> multiMatcher = TokenSequencePattern.getMultiPatternMatcher(tokenSequencePatterns);
 
     int i = 0;
+    System.out.println(sentences.size());
     for (CoreMap sentence : sentences) {
       List<CoreLabel> tokens = sentence.get(CoreAnnotations.TokensAnnotation.class);
       System.out.println("Sentence #" + ++i);
