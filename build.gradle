@@ -18,8 +18,8 @@ compileJava.options.encoding = 'UTF-8'
 // Add src-extra build target
 sourceSets {
   main {
-    java.srcDirs = ['src/']
-    resources.srcDirs = ['src/']
+    java.srcDirs = ['src/main']
+    resources.srcDirs = ['src/main']
   }
 }
 
