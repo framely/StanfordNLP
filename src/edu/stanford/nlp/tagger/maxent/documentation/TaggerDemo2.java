@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import edu.stanford.nlp.ling.SentenceUtils;
@@ -27,7 +28,7 @@ import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 public class TaggerDemo2  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(TaggerDemo2.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(TaggerDemo2.class);
 
   private TaggerDemo2() {}
 
@@ -39,8 +40,8 @@ public class TaggerDemo2  {
     MaxentTagger tagger = new MaxentTagger(args[0]);
     TokenizerFactory<CoreLabel> ptbTokenizerFactory = PTBTokenizer.factory(new CoreLabelTokenFactory(),
 									   "untokenizable=noneKeep");
-    BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(args[1]), "utf-8"));
-    PrintWriter pw = new PrintWriter(new OutputStreamWriter(System.out, "utf-8"));
+    BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(args[1]), StandardCharsets.UTF_8));
+    PrintWriter pw = new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8));
     DocumentPreprocessor documentPreprocessor = new DocumentPreprocessor(r);
     documentPreprocessor.setTokenizerFactory(ptbTokenizerFactory);
     for (List<HasWord> sentence : documentPreprocessor) {

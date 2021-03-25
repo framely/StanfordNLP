@@ -14,8 +14,8 @@ import java.util.*;
 
 public class CoreEntityMention {
 
-  private CoreMap entityMentionCoreMap;
-  private CoreSentence sentence;
+  private final CoreMap entityMentionCoreMap;
+  private final CoreSentence sentence;
 
   public CoreEntityMention(CoreSentence mySentence, CoreMap coreMapEntityMention) {
     this.sentence = mySentence;
@@ -57,10 +57,6 @@ public class CoreEntityMention {
     return this.entityMentionCoreMap.get(CoreAnnotations.NamedEntityTagProbsAnnotation.class);
   }
 
-  /** return the entity this entity mention is linked to **/
-  public String entity() {
-    return this.entityMentionCoreMap.get(CoreAnnotations.WikipediaEntityAnnotation.class);
-  }
 
   /** return the canonical entity mention for this entity mention **/
   public Optional<CoreEntityMention> canonicalEntityMention() {

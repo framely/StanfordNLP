@@ -33,7 +33,7 @@ public class ReflectionLoading {
   public static <T> T loadByReflection(String className,
                                        Object ... arguments) {
     try{
-      return (T) new MetaClass(className).createInstance(arguments);
+      return new MetaClass(className).createInstance(arguments);
     } catch (Exception e) {
       throw new ReflectionLoadingException("Error creating " + className, e);
     }

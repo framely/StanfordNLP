@@ -14,9 +14,8 @@ import java.util.function.Function;
 /**
  * Flags for sequence classifiers. Documentation for general flags and
  * flags for NER can be found in the Javadoc of
- * {@link edu.stanford.nlp.ie.NERFeatureFactory}. Documentation for the flags
  * for Chinese word segmentation can be found in the Javadoc of
- * {@link edu.stanford.nlp.wordseg.ChineseSegmenterFeatureFactory}.
+
  *
  * <i>IMPORTANT NOTE IF CHANGING THIS FILE:</i> <b>MAKE SURE</b> TO
  * ONLY ADD NEW VARIABLES AT THE END OF THE LIST OF VARIABLES (and not
@@ -1062,7 +1061,7 @@ public class SeqClassifierFlags implements Serializable  {
    */
   public int maxAdditionalKnownLCWords = 0; // was 10_000;
 
-  public enum SlashHyphenEnum { NONE, WFRAG, WORD, BOTH };
+  public enum SlashHyphenEnum { NONE, WFRAG, WORD, BOTH }
 
   public SlashHyphenEnum slashHyphenTreatment = SlashHyphenEnum.NONE;
 

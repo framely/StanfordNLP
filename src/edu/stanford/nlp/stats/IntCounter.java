@@ -39,9 +39,9 @@ import edu.stanford.nlp.util.logging.Redwood.RedwoodChannels;
 public class IntCounter<E> extends AbstractCounter<E> implements Serializable {
 
   @SuppressWarnings({"NonSerializableFieldInSerializableClass"})
-  private Map<E, MutableInteger>  map;
+  private final Map<E, MutableInteger>  map;
   @SuppressWarnings("unchecked")
-  private MapFactory mapFactory;
+  private final MapFactory mapFactory;
   private int totalCount;
   private int defaultValue; // = 0;
 
@@ -57,7 +57,7 @@ public class IntCounter<E> extends AbstractCounter<E> implements Serializable {
    * Constructs a new (empty) Counter.
    */
   public IntCounter() {
-    this(MapFactory.<E,MutableInteger>hashMapFactory());
+    this(MapFactory.hashMapFactory());
   }
 
   /**
@@ -80,7 +80,7 @@ public class IntCounter<E> extends AbstractCounter<E> implements Serializable {
 
   // STANDARD ACCESS MODIFICATION METHODS
   public MapFactory<E, MutableInteger> getMapFactory() {
-    return ErasureUtils.<MapFactory<E,MutableInteger>>uncheckedCast(mapFactory);
+    return ErasureUtils.uncheckedCast(mapFactory);
   }
 
   public void setDefaultReturnValue(double rv) {
@@ -628,7 +628,7 @@ public class IntCounter<E> extends AbstractCounter<E> implements Serializable {
    * {@link #argmax(Comparator)}. Returns null if this Counter is empty.
    */
   public E argmax() {
-    return argmax(ErasureUtils.<Comparator<E>>uncheckedCast(naturalComparator));
+    return argmax(ErasureUtils.uncheckedCast(naturalComparator));
   }
 
   /**
@@ -660,7 +660,7 @@ public class IntCounter<E> extends AbstractCounter<E> implements Serializable {
    * {@link #argmin(Comparator)}. Returns null if this Counter is empty.
    */
   public E argmin() {
-    return argmin(ErasureUtils.<Comparator<E>>uncheckedCast(naturalComparator));
+    return argmin(ErasureUtils.uncheckedCast(naturalComparator));
   }
 
   /**
@@ -751,7 +751,7 @@ public class IntCounter<E> extends AbstractCounter<E> implements Serializable {
       @Override
       public Iterator<Double> iterator() {
         return new Iterator<Double>() {
-          Iterator<MutableInteger> inner = map.values().iterator();
+          final Iterator<MutableInteger> inner = map.values().iterator();
 
           public boolean hasNext() {
             return inner.hasNext();

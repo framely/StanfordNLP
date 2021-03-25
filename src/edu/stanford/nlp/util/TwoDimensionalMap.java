@@ -144,7 +144,7 @@ public class TwoDimensionalMap<K1, K2, V> implements Serializable, Iterable<TwoD
   }
 
   public TwoDimensionalMap() {
-    this(MapFactory.<K1, Map<K2, V>>hashMapFactory(), MapFactory.<K2, V>hashMapFactory());
+    this(MapFactory.hashMapFactory(), MapFactory.hashMapFactory());
   }
 
   public TwoDimensionalMap(TwoDimensionalMap<K1, K2, V> tdm) {
@@ -164,15 +164,15 @@ public class TwoDimensionalMap<K1, K2, V> implements Serializable, Iterable<TwoD
   }
 
   public static <K1, K2, V> TwoDimensionalMap<K1, K2, V> hashMap() {
-    return new TwoDimensionalMap<>(MapFactory.<K1, Map<K2, V>>hashMapFactory(), MapFactory.<K2, V>hashMapFactory());
+    return new TwoDimensionalMap<>(MapFactory.hashMapFactory(), MapFactory.hashMapFactory());
   }
 
   public static <K1, K2, V> TwoDimensionalMap<K1, K2, V> treeMap() {
-    return new TwoDimensionalMap<>(MapFactory.<K1, Map<K2, V>>treeMapFactory(), MapFactory.<K2, V>treeMapFactory());
+    return new TwoDimensionalMap<>(MapFactory.treeMapFactory(), MapFactory.treeMapFactory());
   }
 
   public static <K1, K2, V> TwoDimensionalMap<K1, K2, V> identityHashMap() {
-    return new TwoDimensionalMap<>(MapFactory.<K1, Map<K2, V>>identityHashMapFactory(), MapFactory.<K2, V>identityHashMapFactory());
+    return new TwoDimensionalMap<>(MapFactory.identityHashMapFactory(), MapFactory.identityHashMapFactory());
   }
 
   @Override

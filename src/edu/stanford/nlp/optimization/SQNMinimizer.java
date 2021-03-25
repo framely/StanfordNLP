@@ -50,13 +50,13 @@ import edu.stanford.nlp.util.Pair;
 public class SQNMinimizer<T extends Function> extends StochasticMinimizer<T>  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(SQNMinimizer.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(SQNMinimizer.class);
 
   private int M = 0;
-  private double lambda = 1.0;
+  private final double lambda = 1.0;
 
-  private double cPosDef = 1;
-  private double epsilon = 1e-10;
+  private final double cPosDef = 1;
+  private final double epsilon = 1e-10;
 
   private List<double[]> sList = new ArrayList<>();
   private List<double[]> yList = new ArrayList<>();
@@ -165,7 +165,7 @@ public class SQNMinimizer<T extends Function> extends StochasticMinimizer<T>  {
 
     //Get a new pair...
     say(" A ");
-    if (M > 0 && sList.size() == M || sList.size() == M) {
+    if (sList.size() == M) {
       s = sList.remove(0);
       y = yList.remove(0);
     } else {

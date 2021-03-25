@@ -22,12 +22,12 @@ public class CoreQuote {
   public boolean hasCanonicalSpeaker;
   private Optional<String> speaker;
   private Optional<String> canonicalSpeaker;
-  private Optional<List<CoreLabel>> speakerTokens;
-  private Optional<List<CoreLabel>> canonicalSpeakerTokens;
-  private Optional<Pair<Integer,Integer>> speakerCharOffsets;
-  private Optional<Pair<Integer,Integer>> canonicalSpeakerCharOffsets;
-  private Optional<CoreEntityMention> speakerEntityMention;
-  private Optional<CoreEntityMention> canonicalSpeakerEntityMention;
+  private final Optional<List<CoreLabel>> speakerTokens;
+  private final Optional<List<CoreLabel>> canonicalSpeakerTokens;
+  private final Optional<Pair<Integer,Integer>> speakerCharOffsets;
+  private final Optional<Pair<Integer,Integer>> canonicalSpeakerCharOffsets;
+  private final Optional<CoreEntityMention> speakerEntityMention;
+  private final Optional<CoreEntityMention> canonicalSpeakerEntityMention;
 
   public CoreQuote(CoreDocument myDocument, CoreMap coreMapQuote) {
     this.document = myDocument;
@@ -40,60 +40,17 @@ public class CoreQuote {
       this.sentences.add(this.document.sentences().get(currSentIndex));
     }
     // set up the speaker info
-    this.speaker = Optional.ofNullable(this.quoteCoreMap.get(QuoteAttributionAnnotator.SpeakerAnnotation.class));
-    this.canonicalSpeaker = Optional.ofNullable(this.quoteCoreMap.get(QuoteAttributionAnnotator.CanonicalMentionAnnotation.class));
+
     // set up info for direct speaker mention (example: "He")
-    Integer firstSpeakerTokenIndex = quoteCoreMap.get(QuoteAttributionAnnotator.MentionBeginAnnotation.class);
-    Integer lastSpeakerTokenIndex = quoteCoreMap.get(QuoteAttributionAnnotator.MentionEndAnnotation.class);
+
     this.speakerTokens = Optional.empty();
     this.speakerCharOffsets = Optional.empty();
     this.speakerEntityMention = Optional.empty();
-    if (firstSpeakerTokenIndex != null && lastSpeakerTokenIndex != null) {
-      this.speakerTokens = Optional.of(new ArrayList<>());
-      for (int speakerTokenIndex = firstSpeakerTokenIndex ;
-           speakerTokenIndex <= lastSpeakerTokenIndex ; speakerTokenIndex++) {
-        this.speakerTokens.get().add(this.document.tokens().get(speakerTokenIndex));
-      }
-      int speakerCharOffsetBegin =
-          this.speakerTokens.get().get(0).get(CoreAnnotations.CharacterOffsetBeginAnnotation.class);
-      int speakerCharOffsetEnd =
-          this.speakerTokens.get().get(
-              speakerTokens.get().size() - 1).get(CoreAnnotations.CharacterOffsetEndAnnotation.class);
-      this.speakerCharOffsets = Optional.of(new Pair<>(speakerCharOffsetBegin, speakerCharOffsetEnd));
-      for (CoreEntityMention candidateEntityMention : this.document.entityMentions()) {
-        Pair<Integer,Integer> entityMentionOffsets = candidateEntityMention.charOffsets();
-        if (entityMentionOffsets.equals(this.speakerCharOffsets.get())) {
-          this.speakerEntityMention = Optional.of(candidateEntityMention);
-          break;
-        }
-      }
-    }
     // set up info for canonical speaker mention (example: "Joe Smith")
-    Integer firstCanonicalSpeakerTokenIndex = quoteCoreMap.get(QuoteAttributionAnnotator.CanonicalMentionBeginAnnotation.class);
-    Integer lastCanonicalSpeakerTokenIndex = quoteCoreMap.get(QuoteAttributionAnnotator.CanonicalMentionEndAnnotation.class);
+
     this.canonicalSpeakerTokens = Optional.empty();
     this.canonicalSpeakerCharOffsets = Optional.empty();
     this.canonicalSpeakerEntityMention = Optional.empty();
-    if (firstCanonicalSpeakerTokenIndex != null && lastCanonicalSpeakerTokenIndex != null) {
-      this.canonicalSpeakerTokens = Optional.of(new ArrayList<>());
-      for (int canonicalSpeakerTokenIndex = firstCanonicalSpeakerTokenIndex ;
-           canonicalSpeakerTokenIndex <= lastCanonicalSpeakerTokenIndex ; canonicalSpeakerTokenIndex++) {
-        this.canonicalSpeakerTokens.get().add(this.document.tokens().get(canonicalSpeakerTokenIndex));
-      }
-      int canonicalSpeakerCharOffsetBegin =
-          this.canonicalSpeakerTokens.get().get(0).get(CoreAnnotations.CharacterOffsetBeginAnnotation.class);
-      int canonicalSpeakerCharOffsetEnd =
-          this.canonicalSpeakerTokens.get().get(
-              canonicalSpeakerTokens.get().size() - 1).get(CoreAnnotations.CharacterOffsetEndAnnotation.class);
-      this.canonicalSpeakerCharOffsets = Optional.of(new Pair<>(canonicalSpeakerCharOffsetBegin, canonicalSpeakerCharOffsetEnd));
-      for (CoreEntityMention candidateEntityMention : this.document.entityMentions()) {
-        Pair<Integer,Integer> entityMentionOffsets = candidateEntityMention.charOffsets();
-        if (entityMentionOffsets.equals(this.canonicalSpeakerCharOffsets.get())) {
-          this.canonicalSpeakerEntityMention = Optional.of(candidateEntityMention);
-          break;
-        }
-      }
-    }
     // record if there is speaker info
     this.hasSpeaker = this.speaker.isPresent();
     this.hasCanonicalSpeaker = this.canonicalSpeaker.isPresent();

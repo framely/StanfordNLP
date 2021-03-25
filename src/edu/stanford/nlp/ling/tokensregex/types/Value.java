@@ -12,6 +12,6 @@ public interface Value<T> extends Expression {
    *
    * @return a Java object
    */
-  public T get();
+  T get();
 
 }

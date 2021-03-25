@@ -503,9 +503,7 @@ public class Interval<E extends Comparable<E>> extends Pair<E,E> implements HasI
         }
       }
       if (comp21 == 0) {
-        if (!this.includesEnd() || !other.includesBegin()) {
-          return false;
-        }
+        return this.includesEnd() && other.includesBegin();
       }
       return true;
     }
@@ -865,11 +863,7 @@ public class Interval<E extends Comparable<E>> extends Pair<E,E> implements HasI
 
     Interval interval = (Interval) o;
 
-    if (flags != interval.flags) {
-      return false;
-    }
-
-    return true;
+    return flags == interval.flags;
   }
 
   @Override

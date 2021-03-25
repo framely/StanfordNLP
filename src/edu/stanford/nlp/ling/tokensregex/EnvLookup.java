@@ -78,9 +78,7 @@ public class EnvLookup {
   {
     if (env != null) {
       List<Class> obj = env.getDefaultTokensResultAnnotationKey();
-      if (obj != null) {
-        return obj;
-      }
+      return obj;
     }
     return null;
   }
@@ -89,9 +87,7 @@ public class EnvLookup {
   {
     if (env != null) {
       List<Class> obj = env.getDefaultResultAnnotationKey();
-      if (obj != null) {
-        return obj;
-      }
+      return obj;
     }
     return null;
   }
@@ -100,9 +96,7 @@ public class EnvLookup {
   {
     if (env != null) {
       Function<MatchedExpression,?> obj = env.getDefaultResultsAnnotationExtractor();
-      if (obj != null) {
-        return obj;
-      }
+      return obj;
     }
     return null;
   }
@@ -111,9 +105,7 @@ public class EnvLookup {
   {
     if (env != null) {
       Class obj = env.getDefaultNestedResultsAnnotationKey();
-      if (obj != null) {
-        return obj;
-      }
+      return obj;
     }
     return null;
   }

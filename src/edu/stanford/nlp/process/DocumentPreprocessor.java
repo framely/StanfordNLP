@@ -89,7 +89,7 @@ public class DocumentPreprocessor implements Iterable<List<HasWord>>  {
   private static final Pattern wsPattern = Pattern.compile("\\s+");
 
   //From PTB conventions
-  private final String[] sentenceFinalFollowers = {")", "]", "\"", "\'", "''", "-RRB-", "-RSB-", "-RCB-"};
+  private final String[] sentenceFinalFollowers = {")", "]", "\"", "'", "''", "-RRB-", "-RSB-", "-RCB-"};
 
   private boolean keepEmptySentences; // = false;
 

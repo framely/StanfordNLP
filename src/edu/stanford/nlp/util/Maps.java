@@ -38,7 +38,7 @@ public class Maps {
   public static <K, V, C extends Collection<V>> void putIntoValueCollection(Map<K, C> map, K key, V value, CollectionFactory<V> cf) {
     C c = map.get(key);
     if (c == null) {
-      c = ErasureUtils.<C>uncheckedCast(cf.newCollection());
+      c = ErasureUtils.uncheckedCast(cf.newCollection());
       map.put(key, c);
     }
     c.add(value);

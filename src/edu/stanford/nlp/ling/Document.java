@@ -21,7 +21,7 @@ public interface Document<L, F, T> extends Datum<L, F>, List<T> {
    *
    * @return The document's title
    */
-  public abstract String title();
+  String title();
 
   /**
    * Returns a new empty Document with the same meta-data (title, labels, etc)
@@ -32,7 +32,7 @@ public interface Document<L, F, T> extends Datum<L, F>, List<T> {
    *
    * @return An empty document of the right sort.
    */
-  public <OUT> Document<L, F, OUT> blankDocument();
+  <OUT> Document<L, F, OUT> blankDocument();
 
 }
 

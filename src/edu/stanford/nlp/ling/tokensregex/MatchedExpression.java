@@ -184,7 +184,7 @@ public class MatchedExpression {
                                     CoreMapAggregator aggregator) {
     Class<TypesafeMap.Key<List<? extends CoreMap>>> tokensAnnotationKey = extractFunc.tokensAnnotationField;
     if (chunkOffsets != null) {
-      annotation = aggregator.merge((List<? extends CoreMap>) sourceAnnotation.get(tokensAnnotationKey),
+      annotation = aggregator.merge(sourceAnnotation.get(tokensAnnotationKey),
               chunkOffsets.getBegin(), chunkOffsets.getEnd());
       if (sourceAnnotation.containsKey(CoreAnnotations.TextAnnotation.class)) {
         ChunkAnnotationUtils.annotateChunkText(annotation, sourceAnnotation);
@@ -207,9 +207,9 @@ public class MatchedExpression {
         baseCharOffset = 0;
       }
 
-      chunkOffsets = ChunkAnnotationUtils.getChunkOffsetsUsingCharOffsets((List<? extends CoreMap>) sourceAnnotation.get(tokensAnnotationKey),
+      chunkOffsets = ChunkAnnotationUtils.getChunkOffsetsUsingCharOffsets(sourceAnnotation.get(tokensAnnotationKey),
               charOffsets.getBegin() + baseCharOffset, charOffsets.getEnd()  + baseCharOffset);
-      CoreMap annotation2 = aggregator.merge((List<? extends CoreMap>) sourceAnnotation.get(tokensAnnotationKey),
+      CoreMap annotation2 = aggregator.merge(sourceAnnotation.get(tokensAnnotationKey),
               chunkOffsets.getBegin(), chunkOffsets.getEnd());
 
       annotation = ChunkAnnotationUtils.getAnnotatedChunkUsingCharOffsets(sourceAnnotation, charOffsets.getBegin(), charOffsets.getEnd());
@@ -218,7 +218,7 @@ public class MatchedExpression {
       annotation.set(tokensAnnotationKey, annotation2.get(tokensAnnotationKey));
     }
     text = annotation.get(CoreAnnotations.TextAnnotation.class);
-    extractFunc.annotate(this, (List<? extends CoreMap>) annotation.get(tokensAnnotationKey));
+    extractFunc.annotate(this, annotation.get(tokensAnnotationKey));
     return true;
   }
 

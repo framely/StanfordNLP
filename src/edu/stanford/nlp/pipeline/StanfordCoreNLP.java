@@ -32,7 +32,6 @@ import edu.stanford.nlp.io.RuntimeIOException;
 import edu.stanford.nlp.ling.CoreAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.objectbank.ObjectBank;
 import edu.stanford.nlp.util.*;
 import edu.stanford.nlp.util.logging.Redwood;
 import edu.stanford.nlp.util.logging.StanfordRedwoodConfiguration;
@@ -41,6 +40,7 @@ import edu.stanford.nlp.util.logging.StanfordRedwoodConfiguration;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
@@ -352,7 +352,7 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     InputStream in = loader.getResourceAsStream (name);
     try {
       if (in != null) {
-        InputStreamReader reader = new InputStreamReader(in, "utf-8");
+        InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
         result = new Properties ();
         result.load(reader); // Can throw IOException
       }
@@ -538,27 +538,11 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     pool.put(STANFORD_DOCDATE, (props, impl) -> impl.docDate(props));
     pool.put(STANFORD_POS, (props, impl) -> impl.posTagger(props));
     pool.put(STANFORD_LEMMA, (props, impl) -> impl.morpha(props, false));
-    pool.put(STANFORD_NER, (props, impl) -> impl.ner(props));
     pool.put(STANFORD_TOKENSREGEX, (props, impl) -> impl.tokensregex(props, STANFORD_TOKENSREGEX));
     pool.put(STANFORD_REGEXNER, (props, impl) -> impl.tokensRegexNER(props, STANFORD_REGEXNER));
-    pool.put(STANFORD_ENTITY_MENTIONS, (props, impl) -> impl.entityMentions(props, STANFORD_ENTITY_MENTIONS));
     pool.put(STANFORD_GENDER, (props, impl) -> impl.gender(props, STANFORD_GENDER));
-    pool.put(STANFORD_TRUECASE, (props, impl) -> impl.trueCase(props));
-    pool.put(STANFORD_PARSE, (props, impl) -> impl.parse(props));
-    pool.put(STANFORD_COREF_MENTION, (props, impl) -> impl.corefMention(props));
-    pool.put(STANFORD_DETERMINISTIC_COREF, (props, impl) -> impl.dcoref(props));
-    pool.put(STANFORD_COREF, (props, impl) -> impl.coref(props));
-    pool.put(STANFORD_RELATION, (props, impl) -> impl.relations(props));
-    pool.put(STANFORD_SENTIMENT, (props, impl) -> impl.sentiment(props, STANFORD_SENTIMENT));
-    pool.put(STANFORD_COLUMN_DATA_CLASSIFIER, (props, impl) -> impl.columnData(props));
-    pool.put(STANFORD_DEPENDENCIES, (props, impl) -> impl.dependencies(props));
-    pool.put(STANFORD_NATLOG, (props, impl) -> impl.natlog(props));
-    pool.put(STANFORD_OPENIE, (props, impl) -> impl.openie(props));
+
     pool.put(STANFORD_QUOTE, (props, impl) -> impl.quote(props));
-    pool.put(STANFORD_QUOTE_ATTRIBUTION, (props, impl) -> impl.quoteattribution(props));
-    pool.put(STANFORD_UD_FEATURES, (props, impl) -> impl.udfeats(props));
-    pool.put(STANFORD_LINK, (props, impl) -> impl.link(props));
-    pool.put(STANFORD_KBP, (props, impl) -> impl.kbp(props));
     return pool;
   }
 
@@ -747,7 +731,7 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
   public void xmlPrint(Annotation annotation, Writer w) throws IOException {
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     xmlPrint(annotation, os); // this builds it as the encoding specified in the properties
-    w.write(new String(os.toByteArray(), getEncoding()));
+    w.write(os.toString(getEncoding()));
     w.flush();
   }
 
@@ -778,7 +762,7 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
   public void jsonPrint(Annotation annotation, Writer w) throws IOException {
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     JSONOutputter.jsonPrint(annotation, os, this);
-    w.write(new String(os.toByteArray(), getEncoding()));
+    w.write(os.toString(getEncoding()));
     w.flush();
   }
 
@@ -793,7 +777,7 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
   public void conllPrint(Annotation annotation, Writer w) throws IOException {
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     CoNLLOutputter.conllPrint(annotation, os, this);
-    w.write(new String(os.toByteArray(), getEncoding()));
+    w.write(os.toString(getEncoding()));
     w.flush();
   }
 
@@ -876,7 +860,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
     os.println();
     os.println("\tIf annotator \"truecase\" is defined:");
     os.println("\t\"truecase.model\" - path towards the true-casing model; default: " + DefaultPaths.DEFAULT_TRUECASE_MODEL);
-    os.println("\t\"truecase.bias\" - class bias of the true case model; default: " + TrueCaseAnnotator.DEFAULT_MODEL_BIAS);
     os.println("\t\"truecase.mixedcasefile\" - path towards the mixed case file; default: " + DefaultPaths.DEFAULT_TRUECASE_DISAMBIGUATION_LIST);
 
     os.println();
@@ -979,10 +962,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
   }
 
 
-  protected static Collection<File> readFileList(String fileName) {
-    return ObjectBank.getLineIterator(fileName, new ObjectBank.PathToFileFunction());
-  }
-
   private static AnnotationSerializer loadSerializer(String serializerClass, String name, Properties properties) {
     AnnotationSerializer serializer; // initialized below
     try {
@@ -1038,20 +1017,7 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
       case TAGGED:
         new TaggedTextOutputter().print(annotation, fos, outputOptions);
         break;
-      case SERIALIZED:
-        final String serializerClass = properties.getProperty("serializer", ProtobufAnnotationSerializer.class.getName());
-        final String outputSerializerClass = properties.getProperty("outputSerializer", serializerClass);
-        final String outputSerializerName = (serializerClass.equals(outputSerializerClass))? "serializer":"outputSerializer";
-
-        if (outputSerializerClass != null) {
-          AnnotationSerializer outputSerializer = loadSerializer(outputSerializerClass, outputSerializerName, properties);
-          outputSerializer.write(annotation, fos);
-        }
-        break;
-      case CONLLU:
-        new CoNLLUOutputter(properties).print(annotation, fos, outputOptions);
-        break;
-      case INLINEXML:
+       case INLINEXML:
         new InlineXMLOutputter().print(annotation, fos, outputOptions);
         break;
       case CUSTOM:
@@ -1104,7 +1070,6 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
 
   /**
    * A common method for processing a set of files, used in both {@link StanfordCoreNLP} as well as
-   * {@link StanfordCoreNLPClient}.
    *
    * @param base The base input directory to process from.
    * @param files The files to process.
@@ -1359,29 +1324,7 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
       }
       Collection<File> files = new FileSequentialCollection(new File(fileName), properties.getProperty("extension"), true);
       this.processFiles(null, files, numThreads, clearPool, Optional.of(tim));
-    }
-
-    //
-    // Process a list of files
-    //
-    else if (properties.containsKey("filelist")) {
-      String fileName = properties.getProperty("filelist");
-      Collection<File> inputFiles = readFileList(fileName);
-      Collection<File> files = new ArrayList<>(inputFiles.size());
-      for (File file : inputFiles) {
-        if (file.isDirectory()) {
-          files.addAll(new FileSequentialCollection(new File(fileName), properties.getProperty("extension"), true));
-        } else {
-          files.add(file);
-        }
-      }
-      this.processFiles(null, files, numThreads, clearPool, Optional.of(tim));
-    }
-
-    //
-    // Run as a filter or the interactive shell depending on whether atached to console
-    //
-    else {
+    } else {
       this.shell();
     }
 

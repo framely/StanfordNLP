@@ -4,7 +4,6 @@ import edu.stanford.nlp.util.logging.Redwood;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import edu.stanford.nlp.trees.international.pennchinese.ChineseUtils;
 
 import edu.stanford.nlp.objectbank.ObjectBank;
 import edu.stanford.nlp.util.Generics;
@@ -26,7 +25,7 @@ import edu.stanford.nlp.util.Timing;
 public class WordShapeClassifier  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(WordShapeClassifier.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(WordShapeClassifier.class);
 
   public static final int NOWORDSHAPE = -1;
   public static final int WORDSHAPEDAN1 = 0;
@@ -186,8 +185,6 @@ public class WordShapeClassifier  {
         return wordShapeChris4(inStr, false, knownLCWords);
       case WORDSHAPEDIGITS:
         return wordShapeDigits(inStr);
-      case WORDSHAPECHINESE:
-        return wordShapeChinese(inStr);
       case WORDSHAPECLUSTER1:
         return wordShapeCluster1(inStr);
       default:
@@ -891,9 +888,6 @@ public class WordShapeClassifier  {
     }
   }
 
-  private static String wordShapeChinese(final String s) {
-    return ChineseUtils.shapeOf(s, true, true);
-  }
 
 
   private static class DistributionalClusters {

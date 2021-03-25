@@ -1040,7 +1040,7 @@ public class ArrayUtils  {
       if(i==0)
         s = String.valueOf(doubles[i]);
       else
-        s+= glue + String.valueOf(doubles[i]);
+        s+= glue + doubles[i];
     }
     return s;
   }

@@ -96,10 +96,7 @@ public class Quintuple<T1,T2,T3,T4, T5> implements Comparable<Quintuple<T1,T2,T3
     if (fourth != null ? !fourth.equals(quadruple.fourth) : quadruple.fourth != null) {
       return false;
     }
-    if (fifth != null ? !fifth.equals(quadruple.fifth) : quadruple.fifth != null) {
-      return false;
-    }
-    return true;
+    return fifth != null ? fifth.equals(quadruple.fifth) : quadruple.fifth == null;
   }
 
   @Override

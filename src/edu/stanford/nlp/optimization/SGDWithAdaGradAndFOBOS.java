@@ -19,7 +19,7 @@ import java.util.*;
 public class SGDWithAdaGradAndFOBOS<T extends DiffFunction> implements Minimizer<T>, HasEvaluators  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(SGDWithAdaGradAndFOBOS.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(SGDWithAdaGradAndFOBOS.class);
 
   protected double[] x;
   protected double initRate;  // Initial stochastic iteration count
@@ -41,7 +41,8 @@ public class SGDWithAdaGradAndFOBOS<T extends DiffFunction> implements Minimizer
   public List<double[]> sList = null;
   public double[] diag;
   private int hessSampleSize = -1;
-  private double[] s,y = null;
+  private double[] s;
+  private final double[] y = null;
 
   protected Random gen = new Random(1);
   protected long maxTime = Long.MAX_VALUE;
@@ -559,7 +560,7 @@ public class SGDWithAdaGradAndFOBOS<T extends DiffFunction> implements Minimizer
         for(int i=0;i<x.length;i++){ x[i]=Double.NaN; }
         break;
       }
-      sayln(String.valueOf(numBatches)+", n0-fCount:" + numOfNonZero + ((prior != Prior.LASSO && prior != Prior.RIDGE)? ", n0-gCount:"+numOfNonZeroGroup : "") + ((evalScore != Double.NEGATIVE_INFINITY) ? ", evalScore:"+evalScore : "") + (objVal != Double.NEGATIVE_INFINITY ? ", obj_val:" + nf.format(objVal) + ", obj_delta:" + objDelta : "") );
+      sayln(numBatches +", n0-fCount:" + numOfNonZero + ((prior != Prior.LASSO && prior != Prior.RIDGE)? ", n0-gCount:"+numOfNonZeroGroup : "") + ((evalScore != Double.NEGATIVE_INFINITY) ? ", evalScore:"+evalScore : "") + (objVal != Double.NEGATIVE_INFINITY ? ", obj_val:" + nf.format(objVal) + ", obj_delta:" + objDelta : "") );
 
       if (values != null && useAvgImprovement && iters > 5) {
         int size = values.size();

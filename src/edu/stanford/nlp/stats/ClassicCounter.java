@@ -148,7 +148,7 @@ public class ClassicCounter<E> implements Serializable, Counter<E>, Iterable<E> 
   }
 
   public static <E> ClassicCounter<E> identityHashMapCounter() {
-    return new ClassicCounter<>(MapFactory.<E, MutableDouble>identityHashMapFactory());
+    return new ClassicCounter<>(MapFactory.identityHashMapFactory());
   }
 
 
@@ -317,7 +317,7 @@ public class ClassicCounter<E> implements Serializable, Counter<E>, Iterable<E> 
       @Override
       public Iterator<Double> iterator() {
         return new Iterator<Double>() {
-          Iterator<MutableDouble> inner = map.values().iterator();
+          final Iterator<MutableDouble> inner = map.values().iterator();
 
           @Override
           public boolean hasNext() {
@@ -344,7 +344,7 @@ public class ClassicCounter<E> implements Serializable, Counter<E>, Iterable<E> 
 
       @Override
       public boolean contains(Object v) {
-        return v instanceof Double && map.values().contains(new MutableDouble((Double) v));
+        return v instanceof Double && map.containsValue(new MutableDouble((Double) v));
       }
 
     };

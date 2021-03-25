@@ -12,9 +12,9 @@ public interface HasInterval<E extends Comparable<E>> {
    * Returns the interval
    * @return interval
    */
-  public Interval<E> getInterval();
+  Interval<E> getInterval();
 
-  public final static Comparator<HasInterval<Integer>> LENGTH_GT_COMPARATOR =
+  Comparator<HasInterval<Integer>> LENGTH_GT_COMPARATOR =
       (e1, e2) -> {
         int len1 = e1.getInterval().getEnd() - e1.getInterval().getBegin();
         int len2 = e2.getInterval().getEnd() - e2.getInterval().getBegin();
@@ -25,7 +25,7 @@ public interface HasInterval<E extends Comparable<E>> {
         }
       };
 
-  public final static Comparator<HasInterval<Integer>> LENGTH_LT_COMPARATOR =
+  Comparator<HasInterval<Integer>> LENGTH_LT_COMPARATOR =
     (e1, e2) -> {
       int len1 = e1.getInterval().getEnd() - e1.getInterval().getBegin();
       int len2 = e2.getInterval().getEnd() - e2.getInterval().getBegin();
@@ -36,10 +36,10 @@ public interface HasInterval<E extends Comparable<E>> {
       }
     };
 
-  public final static Comparator<HasInterval> ENDPOINTS_COMPARATOR =
+  Comparator<HasInterval> ENDPOINTS_COMPARATOR =
       (e1, e2) -> (e1.getInterval().compareTo(e2.getInterval()));
 
-  public final static Comparator<HasInterval> NESTED_FIRST_ENDPOINTS_COMPARATOR =
+  Comparator<HasInterval> NESTED_FIRST_ENDPOINTS_COMPARATOR =
       (e1, e2) -> {
         Interval.RelType rel = e1.getInterval().getRelation(e2.getInterval());
         if (rel.equals(Interval.RelType.CONTAIN)) {
@@ -51,7 +51,7 @@ public interface HasInterval<E extends Comparable<E>> {
         }
       };
 
-  public final static Comparator<HasInterval> CONTAINS_FIRST_ENDPOINTS_COMPARATOR =
+  Comparator<HasInterval> CONTAINS_FIRST_ENDPOINTS_COMPARATOR =
       (e1, e2) -> {
         Interval.RelType rel = e1.getInterval().getRelation(e2.getInterval());
         if (rel.equals(Interval.RelType.CONTAIN)) {
@@ -63,7 +63,7 @@ public interface HasInterval<E extends Comparable<E>> {
         }
       };
 
-  public final static Comparator<HasInterval<Integer>> LENGTH_ENDPOINTS_COMPARATOR =
+  Comparator<HasInterval<Integer>> LENGTH_ENDPOINTS_COMPARATOR =
           Comparators.chain(HasInterval.LENGTH_GT_COMPARATOR, HasInterval.ENDPOINTS_COMPARATOR);
 
 }

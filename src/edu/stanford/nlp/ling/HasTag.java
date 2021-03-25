@@ -13,7 +13,7 @@ public interface HasTag {
    *
    * @return String the tag value for the label
    */
-  public String tag();
+  String tag();
 
 
   /**
@@ -21,6 +21,6 @@ public interface HasTag {
    *
    * @param tag The tag value for the label
    */
-  public void setTag(String tag);
+  void setTag(String tag);
 
 }

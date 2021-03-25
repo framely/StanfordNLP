@@ -57,9 +57,7 @@ final public class ScoredComparator implements Comparator<Scored>, Serializable 
   public boolean equals(Object o) {
     if (o instanceof ScoredComparator) {
       ScoredComparator sc = (ScoredComparator) o;
-      if (ascending == sc.ascending) {
-        return true;
-      }
+      return ascending == sc.ascending;
     }
     return false;
   }

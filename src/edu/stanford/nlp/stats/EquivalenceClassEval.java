@@ -62,10 +62,10 @@ public class EquivalenceClassEval<IN, OUT> {
   public static final EquivalenceClasser NULL_EQUIVALENCE_CLASSER = o -> null;
   
   public static final  <T,U> EquivalenceClasser<T,U> nullEquivalenceClasser() {
-    return ErasureUtils.<EquivalenceClasser<T,U>>uncheckedCast(NULL_EQUIVALENCE_CLASSER);
+    return ErasureUtils.uncheckedCast(NULL_EQUIVALENCE_CLASSER);
   }
 
-  private boolean verbose = false;
+  private final boolean verbose = false;
 
   EquivalenceClasser<IN, OUT> eq;
   Eval.CollectionContainsChecker<IN> checker;
@@ -77,7 +77,7 @@ public class EquivalenceClassEval<IN, OUT> {
    * and grouping all items into the "null" equivalence class for reporting purposes
    */
   public EquivalenceClassEval() {
-    this(EquivalenceClassEval.<IN,OUT>nullEquivalenceClasser());
+    this(EquivalenceClassEval.nullEquivalenceClasser());
   }
 
 
@@ -94,7 +94,7 @@ public class EquivalenceClassEval<IN, OUT> {
    * and grouping all items into a single equivalence class for reporting statistics.
    */
   public EquivalenceClassEval(EqualityChecker<IN> e) {
-    this(EquivalenceClassEval.<IN,OUT>nullEquivalenceClasser(), e);
+    this(EquivalenceClassEval.nullEquivalenceClasser(), e);
   }
 
   /**
@@ -102,7 +102,7 @@ public class EquivalenceClassEval<IN, OUT> {
    * and grouping all items according to the EquivalenceClasser argument.
    */
   public EquivalenceClassEval(EquivalenceClasser<IN, OUT> eq, String name) {
-    this(eq, EquivalenceClassEval.<IN>defaultChecker(), name);
+    this(eq, EquivalenceClassEval.defaultChecker(), name);
   }
 
   /**
@@ -132,9 +132,9 @@ public class EquivalenceClassEval<IN, OUT> {
   ClassicCounter<OUT> gold = new ClassicCounter<>();
   ClassicCounter<OUT> goldCorrect = new ClassicCounter<>();
 
-  private ClassicCounter<OUT> lastPrecision = new ClassicCounter<>();
-  private ClassicCounter<OUT> lastRecall = new ClassicCounter<>();
-  private ClassicCounter<OUT> lastF1 = new ClassicCounter<>();
+  private final ClassicCounter<OUT> lastPrecision = new ClassicCounter<>();
+  private final ClassicCounter<OUT> lastRecall = new ClassicCounter<>();
+  private final ClassicCounter<OUT> lastF1 = new ClassicCounter<>();
 
   private ClassicCounter<OUT> previousGuessed;
   private ClassicCounter<OUT> previousGuessedCorrect;
@@ -380,7 +380,7 @@ public class EquivalenceClassEval<IN, OUT> {
   //     return pad + whole + "." + frac1;
   //   }
 
-  private static java.text.NumberFormat numberFormat = java.text.NumberFormat.getNumberInstance();
+  private static final java.text.NumberFormat numberFormat = java.text.NumberFormat.getNumberInstance();
 
   {
     numberFormat.setMaximumFractionDigits(4);
@@ -422,8 +422,8 @@ public class EquivalenceClassEval<IN, OUT> {
 
   public static void main(String[] args) {
     final Pattern p = Pattern.compile("^([^:]*):(.*)$");
-    Collection<String> guesses = Arrays.asList(new String[]{"S:a", "S:b", "VP:c", "VP:d", "S:a"});
-    Collection<String> golds = Arrays.asList(new String[]{"S:a", "S:b", "S:b", "VP:d", "VP:a"});
+    Collection<String> guesses = Arrays.asList("S:a", "S:b", "VP:c", "VP:d", "S:a");
+    Collection<String> golds = Arrays.asList("S:a", "S:b", "S:b", "VP:d", "VP:a");
     EqualityChecker<String> e = (o1, o2) -> {
       Matcher m1 = p.matcher(o1);
       m1.find();
@@ -460,7 +460,7 @@ public class EquivalenceClassEval<IN, OUT> {
      * Returns <code>true</code> iff <code>o1</code> and <code>o2</code> are equal by the desired
      * evaluation criterion.
      */
-    public boolean areEqual(T o1, T o2);
+    boolean areEqual(T o1, T o2);
 
   }
 
@@ -492,7 +492,7 @@ public class EquivalenceClassEval<IN, OUT> {
     }
 
     public Eval(boolean bagEval) {
-      this(bagEval,EquivalenceClassEval.<T>defaultChecker());
+      this(bagEval,EquivalenceClassEval.defaultChecker());
     }
 
     public Eval(boolean bagEval, EqualityChecker<T> e) {
@@ -608,8 +608,8 @@ public class EquivalenceClassEval<IN, OUT> {
 
   }
 
-  public static interface Factory<IN, OUT> {
-    public EquivalenceClassEval<IN, OUT> equivalenceClassEval();
+  public interface Factory<IN, OUT> {
+    EquivalenceClassEval<IN, OUT> equivalenceClassEval();
   }
 
   /**
@@ -618,10 +618,10 @@ public class EquivalenceClassEval<IN, OUT> {
    */
   public Factory<IN, OUT> factory() {
     return new Factory<IN, OUT>() {
-      boolean bagEval1 = bagEval;
-      EquivalenceClasser<IN, OUT> eq1 = eq;
-      Eval.CollectionContainsChecker<IN> checker1 = checker;
-      String summaryName1 = summaryName;
+      final boolean bagEval1 = bagEval;
+      final EquivalenceClasser<IN, OUT> eq1 = eq;
+      final Eval.CollectionContainsChecker<IN> checker1 = checker;
+      final String summaryName1 = summaryName;
 
       public EquivalenceClassEval<IN, OUT> equivalenceClassEval() {
         EquivalenceClassEval<IN, OUT> e = new EquivalenceClassEval<>(eq1, checker1, summaryName1);

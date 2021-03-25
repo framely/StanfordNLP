@@ -94,55 +94,6 @@ public final class FileSystem  {
    * @param file
    * @return true if the file exists and is non-empty
    */
-  public static boolean existsAndNonEmpty(File file) {
-    if (!file.exists()) {
-      return false;
-    }
-    
-    Iterable<String> lines = IOUtils.readLines(file);
-    String firstLine;
-    try {
-      firstLine = lines.iterator().next();
-    } catch (NoSuchElementException nsee) {
-      return false;
-    }
-    
-    return firstLine.length() > 0;
-  }
-  
-  /**
-   * Make the given directory or throw a RuntimeException
-   */
-  public static void mkdirOrFail(String dir) {
-    mkdirOrFail(new File(dir));
-  }
-
-  /**
-   * Make the given directory or throw a RuntimeException
-   */
-  public static void mkdirOrFail(File dir) {
-    if (!dir.mkdirs()) {
-      String error = "Could not create " + dir;
-      log.info(error);
-      throw new RuntimeException(error);
-    }
-  }
-
-  public static void checkExistsOrFail(File file) {
-    if (!file.exists()) {
-      String error = "Output path " + file + " does not exist";
-      log.info(error);
-      throw new RuntimeException(error);
-    }
-  }
-
-  public static void checkNotExistsOrFail(File file) {
-    if (file.exists()) {
-      String error = "Output path " + file + " already exists";
-      log.info(error);
-      throw new RuntimeException(error);
-    }
-  }
 
   /**
    * Unit test code

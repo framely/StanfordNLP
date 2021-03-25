@@ -11,9 +11,9 @@ import java.util.List;
  * @author Angel Chang
  */
 public interface SequenceMatchAction<T> {
-  public SequenceMatchResult<T> apply(SequenceMatchResult<T> matchResult, int... groups);
+  SequenceMatchResult<T> apply(SequenceMatchResult<T> matchResult, int... groups);
 
-  public final static class BoundAction<T> {
+  final class BoundAction<T> {
     SequenceMatchAction<T> action;
     int[] groups;
 
@@ -22,7 +22,7 @@ public interface SequenceMatchAction<T> {
     }
   }
 
-  public final static class StartMatchAction<T> implements SequenceMatchAction<T> {
+  final class StartMatchAction<T> implements SequenceMatchAction<T> {
     SequencePattern<T> pattern;
 
     public StartMatchAction(SequencePattern<T> pattern) {
@@ -39,7 +39,7 @@ public interface SequenceMatchAction<T> {
     }
   }
 
-  public final static class NextMatchAction<T> implements SequenceMatchAction<T> {
+  final class NextMatchAction<T> implements SequenceMatchAction<T> {
     public SequenceMatchResult<T> apply(SequenceMatchResult<T> seqMatchResult, int... groups) {
       if (seqMatchResult instanceof SequenceMatcher) {
         SequenceMatcher<T> matcher = (SequenceMatcher<T>) seqMatchResult;
@@ -54,7 +54,7 @@ public interface SequenceMatchAction<T> {
     }
   }
 
-  public final static class BranchAction<T> implements SequenceMatchAction<T> {
+  final class BranchAction<T> implements SequenceMatchAction<T> {
     Predicate<SequenceMatchResult<T>> filter;
     SequenceMatchAction<T> acceptBranch;
     SequenceMatchAction<T> rejectBranch;
@@ -74,7 +74,7 @@ public interface SequenceMatchAction<T> {
     }
   }
 
-  public final static class SeriesAction<T> implements SequenceMatchAction<T> {
+  final class SeriesAction<T> implements SequenceMatchAction<T> {
     List<SequenceMatchAction<T>> actions;
 
     public SeriesAction(SequenceMatchAction<T>... actions) {

@@ -1,6 +1,5 @@
 package edu.stanford.nlp.optimization;
 
-import edu.stanford.nlp.classify.LogPrior;
 import edu.stanford.nlp.math.ArrayMath;
 import edu.stanford.nlp.util.Timing;
 import edu.stanford.nlp.util.logging.Redwood;
@@ -72,32 +71,6 @@ public class SGDMinimizer<T extends Function> implements Minimizer<T>, HasEvalua
       this.tuningSamples = DEFAULT_TUNING_SAMPLES;
       sayln("  SGDMinimizer: tuneSampleSize=" + tuningSamples + ", defaulting to " + this.tuningSamples);
     }
-  }
-
-  public SGDMinimizer(LogPrior prior, int numPasses, int batchSize, int tuningSamples) {
-    if (LogPrior.LogPriorType.QUADRATIC == prior.getType()) {
-      sigma = prior.getSigma();
-    } else {
-      throw new RuntimeException("Unsupported prior type " + prior.getType());
-    }
-    if (numPasses >= 0) {
-      this.numPasses = numPasses;
-    } else {
-      this.numPasses = DEFAULT_NUM_PASSES;
-      sayln("  SGDMinimizer: numPasses=" + numPasses + ", defaulting to " + this.numPasses);
-    }
-    this.bSize = batchSize;
-    if (tuningSamples > 0) {
-      this.tuningSamples = tuningSamples;
-    } else {
-      this.tuningSamples = DEFAULT_TUNING_SAMPLES;
-      sayln("  SGDMinimizer: tuneSampleSize=" + tuningSamples + ", defaulting to " + this.tuningSamples);
-    }
-  }
-
-
-  public void shutUp() {
-    this.quiet = true;
   }
 
   private static final NumberFormat nf = new DecimalFormat("0.000E0");
@@ -313,7 +286,7 @@ public class SGDMinimizer<T extends Function> implements Minimizer<T>, HasEvalua
       xnorm = getNorm(x)*xscale*xscale;
       // Calculate loss based on L2 regularization
       double loss = totalValue + 0.5 * xnorm * lambda * totalSamples;
-      sayln("Iter: " + iters + " pass " + pass + " batch 1 ... " + String.valueOf(numBatches) +
+      sayln("Iter: " + iters + " pass " + pass + " batch 1 ... " + numBatches +
               " [" + ( total.report() )/1000.0 + " s " +
               " {" + (current.restart()/1000.0) + " s}] " +
               lastValue + " " + totalValue + " " + loss);

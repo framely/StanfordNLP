@@ -21,6 +21,6 @@ public interface IteratorFromReaderFactory<T> extends Serializable {
    * @param r Where to read objects from
    * @return An Iterator over the objects
    */
-  public Iterator<T> getIterator(java.io.Reader r);
+  Iterator<T> getIterator(java.io.Reader r);
 
 }

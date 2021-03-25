@@ -1,5 +1,4 @@
 package edu.stanford.nlp.io; 
-import edu.stanford.nlp.util.logging.Redwood;
 
 import edu.stanford.nlp.util.ByteStreamGobbler;
 import edu.stanford.nlp.util.RuntimeInterruptedException;
@@ -15,11 +14,11 @@ import java.io.*;
 */
 public class BZip2PipedOutputStream extends OutputStream
 {
-  private String filename;
-  private Process process;
-  private ByteStreamGobbler outGobbler;
-  private StreamGobbler errGobbler;
-  private PrintWriter errWriter;
+  private final String filename;
+  private final Process process;
+  private final ByteStreamGobbler outGobbler;
+  private final StreamGobbler errGobbler;
+  private final PrintWriter errWriter;
 
   public BZip2PipedOutputStream(String filename) throws IOException {
     this(filename, System.err);

@@ -1,6 +1,5 @@
 package edu.stanford.nlp.pipeline;
 
-import edu.stanford.nlp.parser.nndep.DependencyParser;
 
 import java.lang.reflect.Field;
 
@@ -15,7 +14,6 @@ public class DefaultPaths {
   public static final String DEFAULT_PARSER_MODEL = "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz";
 
   @SuppressWarnings("UnusedDeclaration") // Used in a script
-  public static final String DEFAULT_DEPENDENCY_PARSER_MODEL = DependencyParser.DEFAULT_MODEL;
 
   public static final String DEFAULT_NER_THREECLASS_MODEL = "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz";
   public static final String DEFAULT_NER_CONLL_MODEL = "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz";

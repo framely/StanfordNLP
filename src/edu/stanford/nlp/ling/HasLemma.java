@@ -15,7 +15,7 @@ public interface HasLemma extends Serializable {
    *
    * @return String the lemma value for the label
    */
-  public String lemma();
+  String lemma();
 
 
   /**
@@ -23,6 +23,6 @@ public interface HasLemma extends Serializable {
    *
    * @param lemma The lemma value for the label
    */
-  public void setLemma(String lemma);
+  void setLemma(String lemma);
 
 }

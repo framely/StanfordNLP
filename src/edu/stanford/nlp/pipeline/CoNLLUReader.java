@@ -2,8 +2,6 @@ package edu.stanford.nlp.pipeline;
 
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.*;
-import edu.stanford.nlp.semgraph.*;
-import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.util.*;
 
 import java.io.*;
@@ -78,7 +76,7 @@ public class CoNLLUReader {
    * <p>
    * conllu.extraColumns = CoreAnnotations.TrueCaseAnnotation,CoreAnnotations.CategoryAnnotation
    */
-  private HashMap<Integer, Class> extraColumns = new HashMap<>();
+  private final HashMap<Integer, Class> extraColumns = new HashMap<>();
 
   public CoNLLUReader() throws ClassNotFoundException {
     this(new Properties());
@@ -345,12 +343,8 @@ public class CoNLLUReader {
             sentence.mwtTokens.get(sentence.mwtData.get(sentenceTokenIndex - 1)));
         cl.setIsMWT(true);
         // check if first
-        if (sentence.mwtData.containsKey(sentenceTokenIndex - 2) &&
-            sentence.mwtData.get(sentenceTokenIndex-2).equals(sentence.mwtData.get(sentenceTokenIndex-1))) {
-          cl.setIsMWTFirst(false);
-        } else {
-          cl.setIsMWTFirst(true);
-        }
+        cl.setIsMWTFirst(!sentence.mwtData.containsKey(sentenceTokenIndex - 2) ||
+                !sentence.mwtData.get(sentenceTokenIndex - 2).equals(sentence.mwtData.get(sentenceTokenIndex - 1)));
         // handle MISC info
         String miscInfo = sentence.mwtMiscs.get(sentence.mwtData.get(sentenceTokenIndex - 1));
         for (String miscKV : miscInfo.split("\\|")) {
@@ -414,26 +408,10 @@ public class CoNLLUReader {
       }
     }
 
-    // build SemanticGraphEdges
-    List<SemanticGraphEdge> graphEdges = new ArrayList<>();
-    for (int i = 0; i < lines.size(); i++) {
-      List<String> fields = Arrays.asList(lines.get(i).split("\t"));
-      // skip the ROOT node
-      if (fields.get(CoNLLU_GovField).equals("0"))
-        continue;
-      IndexedWord dependent = new IndexedWord(coreLabels.get(i));
-      IndexedWord gov = new IndexedWord(coreLabels.get(Integer.parseInt(fields.get(CoNLLU_GovField)) - 1));
-      GrammaticalRelation reln = GrammaticalRelation.valueOf(fields.get(CoNLLU_RelnField));
-      graphEdges.add(new SemanticGraphEdge(gov, dependent, reln, 1.0, false));
-    }
-    // build SemanticGraph
-    SemanticGraph depParse = SemanticGraphFactory.makeFromEdges(graphEdges);
     // build sentence CoreMap with full text
     Annotation sentenceCoreMap = new Annotation(doc.docText.substring(sentenceCharBegin).trim());
     // add tokens
     sentenceCoreMap.set(CoreAnnotations.TokensAnnotation.class, coreLabels);
-    // add dependency graph
-    sentenceCoreMap.set(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class, depParse);
     return sentenceCoreMap;
   }
 

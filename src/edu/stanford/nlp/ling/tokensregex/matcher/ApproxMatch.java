@@ -60,9 +60,7 @@ public class ApproxMatch<K,V> extends MultiMatch<K,V> {
 
     ApproxMatch that = (ApproxMatch) o;
 
-    if (Double.compare(that.cost, cost) != 0) return false;
-
-    return true;
+    return Double.compare(that.cost, cost) == 0;
   }
 
   @Override

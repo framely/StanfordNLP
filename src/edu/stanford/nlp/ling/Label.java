@@ -29,7 +29,7 @@ public interface Label {
    *
    * @return the "value" of the label
    */
-  public String value();
+  String value();
 
 
   /**
@@ -37,7 +37,7 @@ public interface Label {
    *
    * @param value - the value for the label
    */
-  public void setValue(String value);
+  void setValue(String value);
 
 
   /**
@@ -48,7 +48,7 @@ public interface Label {
    *
    * @return a text representation of the full label contents
    */
-  public String toString();
+  String toString();
 
 
   /**
@@ -64,7 +64,7 @@ public interface Label {
    * @param labelStr the String that translates into the content of the
    *                 label
    */
-  public void setFromString(String labelStr);
+  void setFromString(String labelStr);
 
   /**
    * Returns a factory that makes labels of the exact same type as this one.
@@ -72,6 +72,6 @@ public interface Label {
    *
    * @return the LabelFactory for this kind of label
    */
-  public LabelFactory labelFactory();
+  LabelFactory labelFactory();
 
 }

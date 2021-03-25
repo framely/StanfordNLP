@@ -19,9 +19,9 @@ public class SimpleGoodTuring {
   private static final double CONFID_FACTOR = 1.96;
   private static final double TOLERANCE = 1e-12;
 
-  private int[] r;               // for each bucket, a frequency
-  private int[] n;               // for each bucket, number of items w that frequency
-  private int rows;              // number of frequency buckets
+  private final int[] r;               // for each bucket, a frequency
+  private final int[] n;               // for each bucket, number of items w that frequency
+  private final int rows;              // number of frequency buckets
 
   private int bigN = 0;          // total count of all items
   private double pZero;          // probability of unseen items
@@ -94,9 +94,9 @@ public class SimpleGoodTuring {
     for (j = 0; j < rows; ++j) {
       i = (j == 0 ? 0 : r[j - 1]);
       if (j == rows - 1)
-        k = (double) (2 * r[j] - i);
+        k = 2 * r[j] - i;
       else
-        k = (double) r[j + 1];
+        k = r[j + 1];
       z[j] = 2 * n[j] / (k - i);
       logR[j] = Math.log(r[j]);
       logZ[j] = Math.log(z[j]);
@@ -109,7 +109,7 @@ public class SimpleGoodTuring {
       if (!indiffValsSeen) {
         x = (r[j] + 1) * (next_n = n[row(r[j] + 1)]) / (double) n[j];
         if (Math.abs(x - y) <= CONFID_FACTOR * Math.sqrt(sq(r[j] + 1.0)
-                                                         * next_n / (sq((double) n[j]))
+                                                         * next_n / (sq(n[j]))
                                                          * (1 + next_n / (double) n[j])))
           indiffValsSeen = true;
         else

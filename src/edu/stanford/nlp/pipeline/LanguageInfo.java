@@ -67,17 +67,17 @@ public class LanguageInfo {
 
   /** convert various input strings to language enum **/
   public static HumanLanguage getLanguageFromString(String inputString) {
-    if (inputString.toLowerCase().equals("arabic") || inputString.toLowerCase().equals("ar"))
+    if (inputString.equalsIgnoreCase("arabic") || inputString.equalsIgnoreCase("ar"))
       return HumanLanguage.ARABIC;
-    if (inputString.toLowerCase().equals("english") || inputString.toLowerCase().equals("en"))
+    if (inputString.equalsIgnoreCase("english") || inputString.equalsIgnoreCase("en"))
       return HumanLanguage.ENGLISH;
-    if (inputString.toLowerCase().equals("chinese") || inputString.toLowerCase().equals("zh"))
+    if (inputString.equalsIgnoreCase("chinese") || inputString.equalsIgnoreCase("zh"))
       return HumanLanguage.CHINESE;
-    if (inputString.toLowerCase().equals("french") || inputString.toLowerCase().equals("fr"))
+    if (inputString.equalsIgnoreCase("french") || inputString.equalsIgnoreCase("fr"))
       return HumanLanguage.FRENCH;
-    if (inputString.toLowerCase().equals("german") || inputString.toLowerCase().equals("de"))
+    if (inputString.equalsIgnoreCase("german") || inputString.equalsIgnoreCase("de"))
       return HumanLanguage.GERMAN;
-    if (inputString.toLowerCase().equals("spanish") || inputString.toLowerCase().equals("es"))
+    if (inputString.equalsIgnoreCase("spanish") || inputString.equalsIgnoreCase("es"))
       return HumanLanguage.SPANISH;
     else
       return null;

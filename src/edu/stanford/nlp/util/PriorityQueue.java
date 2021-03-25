@@ -63,7 +63,7 @@ public interface PriorityQueue<E> extends Set<E> {
    *
    * @return the object with highest priority
    */
-  public E removeFirst();
+  E removeFirst();
 
   /**
    * Finds the object with the highest priority and returns it, without
@@ -71,7 +71,7 @@ public interface PriorityQueue<E> extends Set<E> {
    *
    * @return the object with minimum key
    */
-  public E getFirst();
+  E getFirst();
 
   /**
    * Gets the priority of the highest-priority element of the queue
@@ -79,7 +79,7 @@ public interface PriorityQueue<E> extends Set<E> {
    *
    * @return The priority of the highest-priority element of the queue.
    */
-  public double getPriority();
+  double getPriority();
 
   /**
    * Get the priority of a key.
@@ -88,7 +88,7 @@ public interface PriorityQueue<E> extends Set<E> {
    * @return A key's priority. If the key is not in the queue,
    *         Double.NEGATIVE_INFINITY is returned.
    */
-  public double getPriority(E key);
+  double getPriority(E key);
 
   /**
    * Convenience method for if you want to pretend relaxPriority doesn't exist,
@@ -105,7 +105,7 @@ public interface PriorityQueue<E> extends Set<E> {
    * @return {@code true} if this set did not already contain the specified
    *         element.
    */
-  public boolean add(E key, double priority);
+  boolean add(E key, double priority);
 
 
   /**
@@ -114,16 +114,16 @@ public interface PriorityQueue<E> extends Set<E> {
    * @param key an {@code E} value
    * @return whether the priority actually changed.
    */
-  public boolean changePriority(E key, double priority);
+  boolean changePriority(E key, double priority);
 
   /**
    * Increases the priority of the E key to the new priority if the old priority
    * was lower than the new priority. Otherwise, does nothing.
    *
    */
-  public boolean relaxPriority(E key, double priority);
+  boolean relaxPriority(E key, double priority);
 
-  public List<E> toSortedList();
+  List<E> toSortedList();
 
   /**
    * Returns a representation of the queue in decreasing priority order,
@@ -135,6 +135,6 @@ public interface PriorityQueue<E> extends Set<E> {
    *     the PriorityQueue are printed.
    * @return A String representation of the high priority items in the queue.
    */
-  public String toString(int maxKeysToPrint);
+  String toString(int maxKeysToPrint);
 
 }

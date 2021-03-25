@@ -70,7 +70,7 @@ public class CTBunkDict {
    */
   protected static String getTag(String tag, String word) {
     CTBunkDict dict = CTBunkDict.getInstance();
-    Set<String> words = dict.get(tag);
+    Set<String> words = get(tag);
     if (words != null && words.contains(word)) {
       return "1";
     } else {

@@ -16,7 +16,7 @@ public class FuzzyInterval<E extends FuzzyInterval.FuzzyComparable<E>> extends I
    *
    * @param <T> Type of the object to be compared
    */
-  public static interface FuzzyComparable<T> extends Comparable<T> {
+  public interface FuzzyComparable<T> extends Comparable<T> {
     /**
      * Returns whether this object is comparable with another object
      * @param other

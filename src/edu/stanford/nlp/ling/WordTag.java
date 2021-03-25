@@ -165,8 +165,7 @@ public class WordTag implements Label, HasWord, HasTag, Comparable<WordTag> {
     if (!(o instanceof WordTag)) return false;
     final WordTag wordTag = (WordTag) o;
     if (tag != null ? !tag.equals(wordTag.tag) : wordTag.tag != null) return false;
-    if (word != null ? !word.equals(wordTag.word) : wordTag.word != null) return false;
-    return true;
+    return word != null ? word.equals(wordTag.word) : wordTag.word == null;
   }
 
   @Override

@@ -44,7 +44,7 @@ public class PhraseTable implements Serializable
 {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(PhraseTable.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(PhraseTable.class);
 
   private static final String PHRASE_END = "";
   private static final long serialVersionUID = 1L;
@@ -190,7 +190,7 @@ public class PhraseTable implements Serializable
       String phrase = columns[0];
       // Pick map factory to use depending on number of tags we have
       MapFactory<String,MutableDouble> mapFactory = (columns.length < 20)?
-              MapFactory.<String,MutableDouble>arrayMapFactory(): MapFactory.<String,MutableDouble>linkedHashMapFactory();
+              MapFactory.arrayMapFactory(): MapFactory.linkedHashMapFactory();
       Counter<String> counts = new ClassicCounter<>(mapFactory);
       for (int i = 1; i < columns.length; i++) {
         String[] tagCount = countDelimiterPattern.split(columns[i], 2);
@@ -326,7 +326,7 @@ public class PhraseTable implements Serializable
     return addPhrase(StringUtils.join(tokens, " "), tag, wordList, phraseData);
   }
 
-  private int MAX_LIST_SIZE = 20;
+  private final int MAX_LIST_SIZE = 20;
   private synchronized boolean addPhrase(String phraseText, String tag, WordList wordList, Object phraseData)
   {
     if (rootTree == null) {
@@ -846,8 +846,8 @@ public class PhraseTable implements Serializable
   }
 
   private static class PhraseTableIterator extends AbstractIterator<Phrase> {
-    private PhraseTable phraseTable;
-    private Stack<Iterator<Object>> iteratorStack = new Stack<>();
+    private final PhraseTable phraseTable;
+    private final Stack<Iterator<Object>> iteratorStack = new Stack<>();
     private Phrase next = null;
 
     public PhraseTableIterator(PhraseTable phraseTable) {
@@ -1033,7 +1033,7 @@ public class PhraseTable implements Serializable
     return sb.toString();
   }
 
-  public static interface WordList
+  public interface WordList
   {
     String getWord(int i);
     int size();
@@ -1041,7 +1041,7 @@ public class PhraseTable implements Serializable
 
   public static class TokenList implements WordList
   {
-    private List<? extends CoreMap> tokens;
+    private final List<? extends CoreMap> tokens;
     private Class textKey = CoreAnnotations.TextAnnotation.class;
 
     public TokenList(List<CoreLabel> tokens) {
@@ -1072,7 +1072,7 @@ public class PhraseTable implements Serializable
 
   public static class StringList implements WordList
   {
-    private List<String> words;
+    private final List<String> words;
 
     public StringList(List<String> words) {
       this.words = words;

@@ -369,7 +369,7 @@ public class ComplexNodePattern<M,K> extends NodePattern<M> {
   }
 
   public static class NumericAnnotationPattern extends NodePattern<Object> {
-    static enum CmpType {
+    enum CmpType {
       IS_NUM { boolean accept(double v1, double v2) { return true; } },
       EQ { boolean accept(double v1, double v2) { return v1 == v2; } },   // TODO: equal with doubles is not so good
       NE { boolean accept(double v1, double v2) { return v1 != v2; } },   // TODO: equal with doubles is not so good

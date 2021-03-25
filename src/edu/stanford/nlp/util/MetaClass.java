@@ -3,9 +3,6 @@ package edu.stanford.nlp.util;
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.io.RuntimeIOException;
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.trees.LabeledScoredTreeFactory;
-import edu.stanford.nlp.trees.PennTreeReader;
-import edu.stanford.nlp.trees.Tree;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -283,7 +280,7 @@ public class MetaClass {
 
   } // end static class ClassFactory
 
-  private String classname;
+  private final String classname;
 
   /**
    * Creates a new MetaClass producing objects of the given type
@@ -560,7 +557,7 @@ public class MetaClass {
       return (E) Lazy.of(() -> MetaClass.castWithoutKnowingType(v) );
     } else if (Optional.class.isAssignableFrom(clazz)) {
       //(case: Optional)
-      return (E) ((value == null || "null".equals(value.toLowerCase()) || "empty".equals(value.toLowerCase()) || "none".equals(value.toLowerCase())) ? Optional.empty() : Optional.of(value));
+      return (E) ((value == null || "null".equalsIgnoreCase(value) || "empty".equalsIgnoreCase(value) || "none".equalsIgnoreCase(value)) ? Optional.empty() : Optional.of(value));
     } else if (java.util.Date.class.isAssignableFrom(clazz)) {
       //(case: date)
       try {
@@ -618,7 +615,7 @@ public class MetaClass {
       return (E) StringUtils.decodeMap(value);
     } else if (clazz.isEnum()) {
       // (case: enumeration)
-      Class c = (Class) clazz;
+      Class c = clazz;
       if(value == null){ return null; }
       if (value.charAt(0) == '"') value = value.substring(1);
       if (value.charAt(value.length()-1) == '"') value = value.substring(0, value.length() - 1);
@@ -640,14 +637,14 @@ public class MetaClass {
     } else if (ObjectOutputStream.class.isAssignableFrom(clazz)) {
       // (case: object output stream)
       try {
-        return (E) new ObjectOutputStream((OutputStream) cast(value, OutputStream.class));
+        return (E) new ObjectOutputStream(cast(value, OutputStream.class));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
     } else if (ObjectInputStream.class.isAssignableFrom(clazz)) {
       // (case: object input stream)
       try {
-        return (E) new ObjectInputStream((InputStream) cast(value, InputStream.class));
+        return (E) new ObjectInputStream(cast(value, InputStream.class));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -700,14 +697,7 @@ public class MetaClass {
       }
 
       // Pass 2: Guess what the object could be
-      if (Tree.class.isAssignableFrom(clazz)) {
-        // (case: reading a tree)
-        try {
-          return (E) new PennTreeReader(new StringReader(value), new LabeledScoredTreeFactory(CoreLabel.factory())).readTree();
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-      } else if (Collection.class.isAssignableFrom(clazz)) {
+      if (Collection.class.isAssignableFrom(clazz)) {
         // (case: reading a collection)
         Collection rtn;
         if (Modifier.isAbstract(clazz.getModifiers())) {

@@ -42,10 +42,7 @@ public class ThreeDimensionalMap<K1, K2, K3, V> implements Serializable {
       return false;
     if (!map.get(key1).containsKey(key2))
       return false;
-    if (!map.get(key1).get(key2).containsKey(key3))
-      return false;
-    else
-      return true;
+      return map.get(key1).get(key2).containsKey(key3);
   }
 
   public void remove(K1 key1, K2 key2, K3 key3) {

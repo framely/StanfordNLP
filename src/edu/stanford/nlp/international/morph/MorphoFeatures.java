@@ -92,7 +92,7 @@ public class MorphoFeatures implements Serializable {
    * @param str
    */
   public MorphoFeatures fromTagString(String str) {
-    List<String> feats = Arrays.asList(str.split("\\-"));
+    String[] feats = str.split("\\-");
     MorphoFeatures mFeats = new MorphoFeatures();
     for(String fPair : feats) {
       String[] keyValue = fPair.split(KEY_VAL_DELIM);

@@ -230,7 +230,7 @@ public class PropertiesUtils {
     if (value == null) {
       return defaultValue;
     } else {
-      return (E) MetaClass.cast(value, type);
+      return MetaClass.cast(value, type);
     }
   }
 

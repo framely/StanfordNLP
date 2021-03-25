@@ -1338,7 +1338,7 @@ public class StringUtils  {
   public static void printStringOneCharPerLine(String s) {
     for (int i = 0; i < s.length(); i++) {
       int c = s.charAt(i);
-      System.out.println(c + " \'" + (char) c + "\' ");
+      System.out.println(c + " '" + (char) c + "' ");
     }
   }
 
@@ -1926,7 +1926,7 @@ public class StringUtils  {
         } else if (c >= 0x00fd && c <= 0x00ff) {
           result = "y";
         } else if (c >= 0x2018 && c <= 0x2019) {
-          result = "\'";
+          result = "'";
         } else if (c >= 0x201c && c <= 0x201e) {
           result = "\"";
         } else if (c >= 0x0213 && c <= 0x2014) {
@@ -2287,7 +2287,7 @@ public class StringUtils  {
     return ngrams;
   }
 
-  private static Pattern diacriticalMarksPattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}");
+  private static final Pattern diacriticalMarksPattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}");
   public static String normalize(String s) {
     // Normalizes string and strips diacritics (map to ascii) by
     // 1. taking the NFKD (compatibility decomposition -
@@ -2687,7 +2687,6 @@ public class StringUtils  {
         } else if(chars[i] == '\''){
           quoteCloseChar = '\'';
         } else if (chars[i] == '\n' && current.length() == 0) {
-          current.append("");  // do nothing
         } else if(chars[i] == ',' || chars[i] == ';' || chars[i] == '\t' || chars[i] == '\n'){
           // case: end a value
           if (onKey) {

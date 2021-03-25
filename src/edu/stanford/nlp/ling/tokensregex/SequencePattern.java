@@ -274,8 +274,8 @@ public class SequencePattern<T> implements Serializable {
   }
 
   // Interface indicating when two nodes match
-  protected static interface NodesMatchChecker<T> {
-    public boolean matches(T o1, T o2);
+  protected interface NodesMatchChecker<T> {
+    boolean matches(T o1, T o2);
   }
 
   public static final NodesMatchChecker<Object> NODES_EQUAL_CHECKER = new NodesMatchChecker<Object>() {

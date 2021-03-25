@@ -6,5 +6,5 @@ package edu.stanford.nlp.ling.tokensregex.types;
 * @author Angel Chang
 */
 public interface AssignableExpression extends Expression {
-  public Expression assign(Expression expr);
+  Expression assign(Expression expr);
 }

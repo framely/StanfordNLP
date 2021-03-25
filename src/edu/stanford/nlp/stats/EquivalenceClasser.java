@@ -13,5 +13,5 @@ package edu.stanford.nlp.stats;
  */
 
 public interface EquivalenceClasser <IN, OUT> {
-  public OUT equivalenceClass(IN o);
+  OUT equivalenceClass(IN o);
 }

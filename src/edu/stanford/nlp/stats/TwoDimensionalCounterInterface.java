@@ -11,65 +11,65 @@ import java.util.*;
  */
 public interface TwoDimensionalCounterInterface<K1, K2>  {
 
-  public void defaultReturnValue(double rv);
-  public double defaultReturnValue();
+  void defaultReturnValue(double rv);
+  double defaultReturnValue();
 
   /**
    * @return total number of entries (key pairs)
    */
-  public int size();
+  int size();
 
-  public boolean containsKey(K1 o1, K2 o2);
-
-  /**
-   */
-  public void incrementCount(K1 o1, K2 o2);
+  boolean containsKey(K1 o1, K2 o2);
 
   /**
    */
-  public void incrementCount(K1 o1, K2 o2, double count);
+  void incrementCount(K1 o1, K2 o2);
 
   /**
    */
-  public void decrementCount(K1 o1, K2 o2);
+  void incrementCount(K1 o1, K2 o2, double count);
 
   /**
    */
-  public void decrementCount(K1 o1, K2 o2, double count);
+  void decrementCount(K1 o1, K2 o2);
 
   /**
    */
-  public void setCount(K1 o1, K2 o2, double count);
-
-  public double remove(K1 o1, K2 o2);
+  void decrementCount(K1 o1, K2 o2, double count);
 
   /**
    */
-  public double getCount(K1 o1, K2 o2);
+  void setCount(K1 o1, K2 o2, double count);
 
-  public double totalCount();
+  double remove(K1 o1, K2 o2);
 
   /**
    */
-  public double totalCount(K1 k1);
+  double getCount(K1 o1, K2 o2);
 
-  public Set<K1> firstKeySet();
+  double totalCount();
 
-  public Set<K2> secondKeySet();
+  /**
+   */
+  double totalCount(K1 k1);
 
-  public boolean isEmpty();
+  Set<K1> firstKeySet();
 
-  public void remove(K1 key);
+  Set<K2> secondKeySet();
 
-  public String toMatrixString(int cellSize);
+  boolean isEmpty();
+
+  void remove(K1 key);
+
+  String toMatrixString(int cellSize);
 
   /**
    * Given an ordering of the first (row) and second (column) keys, will produce
    * a double matrix.
    */
-  public double[][] toMatrix(List<K1> firstKeys, List<K2> secondKeys);
+  double[][] toMatrix(List<K1> firstKeys, List<K2> secondKeys);
 
-  public String toCSVString(NumberFormat nf);
+  String toCSVString(NumberFormat nf);
 
 
   /** Counter based operations */
@@ -77,7 +77,7 @@ public interface TwoDimensionalCounterInterface<K1, K2>  {
   /**
    * @return the inner Counter associated with key o
    */
-  public Counter<K2> getCounter(K1 o);
+  Counter<K2> getCounter(K1 o);
 
   //public Set<Map.Entry<K1, ClassicCounter<K2>>> entrySet();
 

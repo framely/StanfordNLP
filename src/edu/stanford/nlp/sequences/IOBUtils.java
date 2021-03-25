@@ -20,7 +20,7 @@ import edu.stanford.nlp.util.TypesafeMap;
 public class IOBUtils  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(IOBUtils.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(IOBUtils.class);
 
   private IOBUtils() {} // static methods
 
@@ -110,7 +110,7 @@ public class IOBUtils  {
       String base;
       char prefix;
       if (cAns.length() > 2 && cAns.charAt(1) == '-') {
-        base = cAns.substring(2, cAns.length());
+        base = cAns.substring(2);
         prefix = Character.toUpperCase(cAns.charAt(0));
       } else {
         base = cAns;
@@ -119,7 +119,7 @@ public class IOBUtils  {
       String pBase;
       char pPrefix;
       if (pAns.length() > 2 && pAns.charAt(1) == '-') {
-        pBase = pAns.substring(2, pAns.length());
+        pBase = pAns.substring(2);
         pPrefix = Character.toUpperCase(pAns.charAt(0));
       } else {
         pBase = pAns;
@@ -128,7 +128,7 @@ public class IOBUtils  {
       String nBase;
       char nPrefix;
       if (nAns.length() > 2 && nAns.charAt(1) == '-') {
-        nBase = nAns.substring(2, nAns.length());
+        nBase = nAns.substring(2);
         nPrefix = Character.toUpperCase(nAns.charAt(0));
       } else {
         nBase = nAns;
@@ -267,7 +267,7 @@ public class IOBUtils  {
         log.info("Missing gold entity");
         return false;
       } else if (gold.length() > 2 && gold.charAt(1) == '-') {
-        goldEntity = gold.substring(2, gold.length());
+        goldEntity = gold.substring(2);
         goldPrefix = Character.toUpperCase(gold.charAt(0));
       } else {
         goldEntity = gold;
@@ -277,7 +277,7 @@ public class IOBUtils  {
         log.info("Missing guess entity");
         return false;
       } else if (guess.length() > 2 && guess.charAt(1) == '-') {
-        guessEntity = guess.substring(2, guess.length());
+        guessEntity = guess.substring(2);
         guessPrefix = Character.toUpperCase(guess.charAt(0));
       } else {
         guessEntity = guess;

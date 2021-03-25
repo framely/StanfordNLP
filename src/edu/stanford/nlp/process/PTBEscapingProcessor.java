@@ -122,7 +122,7 @@ public class PTBEscapingProcessor<IN extends HasWord, L, F> extends AbstractList
             hw.setWord("``");
             begin = false;
           } else {
-            hw.setWord("\'\'");
+            hw.setWord("''");
             begin = true;
           }
         } // otherwise leave it alone
@@ -138,7 +138,7 @@ public class PTBEscapingProcessor<IN extends HasWord, L, F> extends AbstractList
             hw.setWord("``");
             begin = false;
           } else {
-            hw.setWord("\'\'");
+            hw.setWord("''");
             begin = true;
           }
         } // otherwise leave it alone

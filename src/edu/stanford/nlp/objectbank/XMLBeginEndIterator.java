@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 public class XMLBeginEndIterator<E> extends AbstractIterator<E>  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(XMLBeginEndIterator.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(XMLBeginEndIterator.class);
 
   private final Pattern tagNamePattern;
   private final BufferedReader inputReader;
@@ -125,7 +125,7 @@ public class XMLBeginEndIterator<E> extends AbstractIterator<E>  {
           return null; // unexpected end of this element, so no more elements
         }
         if (tagNamePattern.matcher(tag.name).matches() && tag.isEndTag) {
-          if ((countDepth && depth == 1) || !countDepth) {
+          if (!countDepth || depth == 1) {
             if (keepDelimitingTags) {
               result.append(tagString);
             }

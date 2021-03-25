@@ -62,7 +62,7 @@ public class GenericAnnotationSerializer extends AnnotationSerializer {
     if(! (annotation instanceof Annotation)){
       throw new ClassCastException("ERROR: Serialized data does not contain an Annotation!");
     }
-    return Pair.makePair((Annotation) annotation, (InputStream) objectInput);
+    return Pair.makePair((Annotation) annotation, objectInput);
   }
 
 }

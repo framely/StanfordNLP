@@ -9,5 +9,5 @@ import java.util.function.Function;
  * @author David Hall
  */
 public interface BijectiveFunction<T1,T2> extends Function<T1,T2> {
-  public T1 unapply(T2 in);
+  T1 unapply(T2 in);
 }

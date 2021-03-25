@@ -104,7 +104,7 @@ import java.util.regex.Pattern;
 public class Expressions  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(Expressions.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(Expressions.class);
 
   /** VAR - Variable */
   public static final String TYPE_VAR = "VAR";
@@ -250,9 +250,7 @@ public class Expressions  {
 
       WrappedExpression that = (WrappedExpression) o;
 
-      if (expr != null ? !expr.equals(that.expr) : that.expr != null) return false;
-
-      return true;
+      return expr != null ? expr.equals(that.expr) : that.expr == null;
     }
 
     @Override
@@ -306,9 +304,7 @@ public class Expressions  {
       TypedExpression that = (TypedExpression) o;
 
       if (tags != null ? !tags.equals(that.tags) : that.tags != null) return false;
-      if (typename != null ? !typename.equals(that.typename) : that.typename != null) return false;
-
-      return true;
+      return typename != null ? typename.equals(that.typename) : that.typename == null;
     }
 
     @Override
@@ -347,9 +343,7 @@ public class Expressions  {
 
       SimpleExpression that = (SimpleExpression) o;
 
-      if (value != null ? !value.equals(that.value) : that.value != null) return false;
-
-      return true;
+      return value != null ? value.equals(that.value) : that.value == null;
     }
 
     @Override
@@ -399,9 +393,7 @@ public class Expressions  {
       SimpleCachedExpression that = (SimpleCachedExpression) o;
 
       if (disableCaching != that.disableCaching) return false;
-      if (evaluated != null ? !evaluated.equals(that.evaluated) : that.evaluated != null) return false;
-
-      return true;
+      return evaluated != null ? evaluated.equals(that.evaluated) : that.evaluated == null;
     }
 
     @Override
@@ -448,9 +440,7 @@ public class Expressions  {
 
       SimpleValue that = (SimpleValue) o;
 
-      if (value != null ? !value.equals(that.value) : that.value != null) return false;
-
-      return true;
+      return value != null ? value.equals(that.value) : that.value == null;
     }
 
     @Override
@@ -526,9 +516,7 @@ public class Expressions  {
 
       if (bindAsValue != that.bindAsValue) return false;
       if (valueExpr != null ? !valueExpr.equals(that.valueExpr) : that.valueExpr != null) return false;
-      if (varName != null ? !varName.equals(that.varName) : that.varName != null) return false;
-
-      return true;
+      return varName != null ? varName.equals(that.varName) : that.varName == null;
     }
 
     @Override
@@ -844,7 +832,7 @@ public class Expressions  {
       List<Value> values = new ArrayList<>(exprs.size());
       for (Expression s:exprs) {
         values.add(s.evaluate(env, args));
-      };
+      }
       return new PrimitiveValue<>(typename, values);
     }
   }
@@ -1017,9 +1005,7 @@ public class Expressions  {
       FunctionCallExpression that = (FunctionCallExpression) o;
 
       if (function != null ? !function.equals(that.function) : that.function != null) return false;
-      if (params != null ? !params.equals(that.params) : that.params != null) return false;
-
-      return true;
+      return params != null ? params.equals(that.params) : that.params == null;
     }
 
     @Override
@@ -1142,9 +1128,7 @@ public class Expressions  {
 
       if (function != null ? !function.equals(that.function) : that.function != null) return false;
       if (object != null ? !object.equals(that.object) : that.object != null) return false;
-      if (params != null ? !params.equals(that.params) : that.params != null) return false;
-
-      return true;
+      return params != null ? params.equals(that.params) : that.params == null;
     }
 
     @Override

@@ -20,6 +20,6 @@ public interface Sampler<T> {
    * distribution for the observation this Sampler was
    * created for.
    */
-  public T drawSample();
+  T drawSample();
 
 }

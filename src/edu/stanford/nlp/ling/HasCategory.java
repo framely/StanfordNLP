@@ -13,7 +13,7 @@ public interface HasCategory {
    *
    * @return String the category value for the label
    */
-  public String category();
+  String category();
 
 
   /**
@@ -21,6 +21,6 @@ public interface HasCategory {
    *
    * @param category The category value for the label
    */
-  public void setCategory(String category);
+  void setCategory(String category);
 
 }

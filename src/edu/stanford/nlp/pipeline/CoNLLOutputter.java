@@ -13,9 +13,6 @@ import edu.stanford.nlp.ling.CoreAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.IndexedWord;
-import edu.stanford.nlp.semgraph.SemanticGraph;
-import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
-import edu.stanford.nlp.semgraph.SemanticGraphEdge;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.StringUtils;
 
@@ -156,28 +153,12 @@ public class CoNLLOutputter extends AnnotationOutputter {
       for (CoreMap sentence : doc.get(CoreAnnotations.SentencesAnnotation.class)) {
         if (sentence.get(CoreAnnotations.TokensAnnotation.class) != null) {
           List<CoreLabel> tokens = sentence.get(CoreAnnotations.TokensAnnotation.class);
-          SemanticGraph depTree = sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
           for (int i = 0; i < tokens.size(); ++i) {
             // ^^ end nonsense to get tokens ^^
 
             // Try to get the incoming dependency edge
             int head = -1;
             String deprel = null;
-            if (depTree != null) {
-              Set<Integer> rootSet = depTree.getRoots().stream().map(IndexedWord::index).collect(Collectors.toSet());
-              IndexedWord node = depTree.getNodeByIndexSafe(i + 1);
-              if (node != null) {
-                List<SemanticGraphEdge> edgeList = depTree.getIncomingEdgesSorted(node);
-                if (!edgeList.isEmpty()) {
-                  assert edgeList.size() == 1;
-                  head = edgeList.get(0).getGovernor().index();
-                  deprel = edgeList.get(0).getRelation().toString();
-                } else if (rootSet.contains(i + 1)) {
-                  head = 0;
-                  deprel = "ROOT";
-                }
-              }
-            }
 
             // Write the token
             writer.print(line(i + 1, tokens.get(i), head, deprel, options));

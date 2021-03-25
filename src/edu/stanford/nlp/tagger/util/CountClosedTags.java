@@ -1,6 +1,7 @@
 package edu.stanford.nlp.tagger.util; 
 
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,16 +57,16 @@ public class CountClosedTags  {
   /**
    * Which tags to look for
    */
-  private Set<String> closedTags;
+  private final Set<String> closedTags;
 
   /**
    * Words seen in the first trainingRatio fraction of the trainFiles
    */
-  private Map<String, Set<String>> trainingWords = Generics.newHashMap();
+  private final Map<String, Set<String>> trainingWords = Generics.newHashMap();
   /**
    * Words seen in either trainFiles or testFiles
    */
-  private Map<String, Set<String>> allWords = Generics.newHashMap();
+  private final Map<String, Set<String>> allWords = Generics.newHashMap();
 
   private static final double DEFAULT_TRAINING_RATIO = 2.0 / 3.0;
   /**
@@ -235,8 +236,8 @@ public class CountClosedTags  {
   }
 
   public static void main(String[] args) throws Exception {
-    System.setOut(new PrintStream(System.out, true, "UTF-8"));
-    System.setErr(new PrintStream(System.err, true, "UTF-8"));
+    System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+    System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8));
 
     Properties config = StringUtils.argsToProperties(args);
     checkArgs(config);

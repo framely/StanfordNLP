@@ -6,5 +6,5 @@ package edu.stanford.nlp.optimization;
  * @author Angel Chang
  */
 public interface HasEvaluators {
-  public void setEvaluators(int iters, Evaluator[] evaluators);
+  void setEvaluators(int iters, Evaluator[] evaluators);
 }

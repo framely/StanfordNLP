@@ -4,6 +4,7 @@ package edu.stanford.nlp.process;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 import java.util.function.Function;
@@ -73,7 +74,7 @@ public class Stemmer implements Function<Word,Word> {
       case 'u':
         return false;
       case 'y':
-        return (i == 0) ? true : !cons(i - 1);
+        return i == 0 || !cons(i - 1);
       default:
         return true;
     }
@@ -167,11 +168,8 @@ public class Stemmer implements Function<Word,Word> {
     }
     {
       int ch = b[i];
-      if (ch == 'w' || ch == 'x' || ch == 'y') {
-        return false;
-      }
+        return ch != 'w' && ch != 'x' && ch != 'y';
     }
-    return true;
   }
 
   private final boolean ends(String s) {
@@ -573,7 +571,7 @@ public class Stemmer implements Function<Word,Word> {
   public static void main(String[] args) throws IOException {
     Stemmer s = new Stemmer();
     if (args[0].equals("-file")) {
-      Iterator<Word> it = PTBTokenizer.newPTBTokenizer(new InputStreamReader(new FileInputStream(args[1]), "utf-8"));
+      Iterator<Word> it = PTBTokenizer.newPTBTokenizer(new InputStreamReader(new FileInputStream(args[1]), StandardCharsets.UTF_8));
       while (it.hasNext()) {
         Word token = it.next();
         System.out.print(s.stem(token.word()));

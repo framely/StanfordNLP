@@ -242,9 +242,7 @@ public class ChunkAnnotationUtils  {
       newChunk = new Annotation("");
     }
     for (Map.Entry<Class,CoreMapAttributeAggregator> entry:aggregators.entrySet()) {
-      if (chunkIndexEnd > chunkList.size()) {
-        assert(false);
-      }
+      assert chunkIndexEnd <= chunkList.size();
       Object value = entry.getValue().aggregate(entry.getKey(), chunkList.subList(chunkIndexStart, chunkIndexEnd));
       newChunk.set(entry.getKey(), value);
     }

@@ -3,7 +3,6 @@ package edu.stanford.nlp.pipeline;
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.*;
 import edu.stanford.nlp.util.logging.Redwood;
 
@@ -32,7 +31,7 @@ public class AnnotationPipeline implements Annotator {
   protected static final boolean TIME = true;
 
   private final List<Annotator> annotators;
-  private List<MutableLong> accumulatedTime;
+  private final List<MutableLong> accumulatedTime;
 
   public AnnotationPipeline(List<Annotator> annotators) {
     this.annotators = annotators;
@@ -234,7 +233,6 @@ public class AnnotationPipeline implements Annotator {
     // ap.addAnnotator(new NERCombinerAnnotator(verbose));
     // ap.addAnnotator(new OldNERAnnotator(verbose));
     // ap.addAnnotator(new NERMergingAnnotator(verbose));
-    ap.addAnnotator(new ParserAnnotator(verbose, -1));
 /*
     ap.addAnnotator(new UpdateSentenceFromParseAnnotator(verbose));
     ap.addAnnotator(new NumberAnnotator(verbose));
@@ -248,9 +246,6 @@ public class AnnotationPipeline implements Annotator {
     Annotation a = new Annotation(text);
     ap.annotate(a);
     System.out.println(a.get(CoreAnnotations.TokensAnnotation.class));
-    for (CoreMap sentence : a.get(CoreAnnotations.SentencesAnnotation.class)) {
-      System.out.println(sentence.get(TreeCoreAnnotations.TreeAnnotation.class));
-    }
 
     if (TIME) {
       System.out.println(ap.timingInformation());

@@ -19,7 +19,7 @@ public interface LabelFactory {
    * @param labelStr The String that will be used for value
    * @return The new Label
    */
-  public Label newLabel(String labelStr);
+  Label newLabel(String labelStr);
 
 
   /**
@@ -31,7 +31,7 @@ public interface LabelFactory {
    * @param options  May determine what kind of label is created
    * @return The new Label
    */
-  public Label newLabel(String labelStr, int options);
+  Label newLabel(String labelStr, int options);
 
 
   /**
@@ -43,7 +43,7 @@ public interface LabelFactory {
    *                        object (by decoding it into parts)
    * @return The new Label
    */
-  public Label newLabelFromString(String encodedLabelStr);
+  Label newLabelFromString(String encodedLabelStr);
 
 
   /**
@@ -61,6 +61,6 @@ public interface LabelFactory {
    * @param oldLabel The Label that the new label is being created from
    * @return The new label of a particular type
    */
-  public Label newLabel(Label oldLabel);
+  Label newLabel(Label oldLabel);
 
 }

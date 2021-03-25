@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -220,13 +221,13 @@ public class WhitespaceTokenizer<T extends HasWord> extends AbstractTokenizer<T>
     Reader reader = ((args.length > 0 &&
                       !args[args.length - 1].equals("-cr")) ?
                      new InputStreamReader(new FileInputStream
-                                           (args[args.length - 1]), "UTF-8") :
-                     new InputStreamReader(System.in, "UTF-8"));
+                                           (args[args.length - 1]), StandardCharsets.UTF_8) :
+                     new InputStreamReader(System.in, StandardCharsets.UTF_8));
     WhitespaceTokenizer<Word> tokenizer =
             new WhitespaceTokenizer<>(new WordTokenFactory(), reader,
                     eolIsSignificant);
     PrintWriter pw =
-      new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"), true);
+      new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8), true);
     while (tokenizer.hasNext()) {
       Word w = tokenizer.next();
       if (w.value().equals(WhitespaceLexer.NEWLINE)) {

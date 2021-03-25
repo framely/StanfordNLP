@@ -38,9 +38,7 @@ public class MultiTokenTag implements Serializable {
 
       if (length != tag1.length) return false;
       if (!name.equals(tag1.name)) return false;
-      if (!tag.equals(tag1.tag)) return false;
-
-      return true;
+      return tag.equals(tag1.tag);
     }
 
     @Override
@@ -77,9 +75,7 @@ public class MultiTokenTag implements Serializable {
     MultiTokenTag that = (MultiTokenTag) o;
 
     if (index != that.index) return false;
-    if (!tag.equals(that.tag)) return false;
-
-    return true;
+    return tag.equals(that.tag);
   }
 
   @Override

@@ -2,7 +2,6 @@ package edu.stanford.nlp.pipeline;
 
 import edu.stanford.nlp.ling.AnnotationLookup;
 import edu.stanford.nlp.ling.CoreAnnotation;
-import edu.stanford.nlp.trees.TreePrint;
 import edu.stanford.nlp.util.PropertiesUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -21,18 +20,13 @@ import java.util.Properties;
  *
  * For lossless (or near lossless) serialization,
  * see {@link edu.stanford.nlp.pipeline.AnnotationSerializer}; e.g.,
- * {@link edu.stanford.nlp.pipeline.ProtobufAnnotationSerializer}.
- *
- * @see edu.stanford.nlp.pipeline.XMLOutputter
+
  * @see edu.stanford.nlp.pipeline.JSONOutputter
  *
  * @author Gabor Angeli
  */
 public abstract class AnnotationOutputter {
 
-  static final TreePrint DEFAULT_CONSTITUENCY_TREE_PRINTER = new TreePrint("penn");
-
-  private static final TreePrint DEFAULT_DEPENDENCY_TREE_PRINTER = new TreePrint("typedDependenciesCollapsed");
 
   private static final String DEFAULT_KEYS = "idx,word,lemma,pos,ner,headidx,deprel";
 
@@ -49,10 +43,6 @@ public abstract class AnnotationOutputter {
      *  particularly useful for sending over the wire. If true, the outputters should pretty-print the output.
      */
     public final boolean pretty;
-    /** How to print a constituency tree for display. */
-    public final TreePrint constituencyTreePrinter;
-    /** How to print a dependency tree by default for display. */
-    public final TreePrint dependencyTreePrinter;
     /** Should a small window of context be provided with each coreference mention */
     public final int coreferenceContextSize;
     /** If false, will print only non-singleton entities */
@@ -74,8 +64,7 @@ public abstract class AnnotationOutputter {
       includeText = false;
       encoding = "UTF-8";
       this.pretty = pretty;
-      constituencyTreePrinter = DEFAULT_CONSTITUENCY_TREE_PRINTER;
-      dependencyTreePrinter = DEFAULT_DEPENDENCY_TREE_PRINTER;
+
       coreferenceContextSize = 0;
       printSingletons = false;
       relationsBeam = 0.0;
@@ -87,9 +76,7 @@ public abstract class AnnotationOutputter {
       encoding = properties.getProperty("encoding", "UTF-8");
       pretty = PropertiesUtils.getBool(properties, "output.prettyPrint", true);
       String constituencyTreeStyle = properties.getProperty("output.constituencyTree", "penn");
-      constituencyTreePrinter = new TreePrint(constituencyTreeStyle);
-      String dependencyTreeStyle = properties.getProperty("output.dependencyTree", "typedDependenciesCollapsed");
-      dependencyTreePrinter = new TreePrint(dependencyTreeStyle);
+
       coreferenceContextSize = PropertiesUtils.getInt(properties,"output.coreferenceContextSize", 0);
       printSingletons = PropertiesUtils.getBool(properties, "output.printSingletonEntities", false);
       relationsBeam = PropertiesUtils.getDouble(properties, "output.relation.beam", 0.0);
@@ -125,7 +112,7 @@ public abstract class AnnotationOutputter {
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     print(ann, os, options);
     os.close();
-    return new String(os.toByteArray());
+    return os.toString();
   }
 
   public String print(Annotation ann) throws IOException {

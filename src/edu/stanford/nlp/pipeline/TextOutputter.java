@@ -7,24 +7,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import edu.stanford.nlp.coref.CorefCoreAnnotations;
-import edu.stanford.nlp.coref.data.CorefChain;
-import edu.stanford.nlp.ie.machinereading.structure.EntityMention;
-import edu.stanford.nlp.ie.machinereading.structure.MachineReadingAnnotations;
-import edu.stanford.nlp.ie.machinereading.structure.RelationMention;
-import edu.stanford.nlp.ie.util.RelationTriple;
+
+
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.naturalli.NaturalLogicAnnotations;
-import edu.stanford.nlp.naturalli.OpenIE;
-import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
-import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
-import edu.stanford.nlp.trees.Tree;
-import edu.stanford.nlp.trees.TreeCoreAnnotations;
-import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
+
 import edu.stanford.nlp.util.CoreMap;
-import edu.stanford.nlp.util.StringUtils;
 
 /**
  * @author John Bauer
@@ -87,13 +76,7 @@ public class TextOutputter extends AnnotationOutputter {
         pw.println();
         CoreMap sentence = sentences.get(i);
         List<CoreLabel> tokens = sentence.get(CoreAnnotations.TokensAnnotation.class);
-        String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-        String piece;
-        if (sentiment == null) {
-          piece = "";
-        } else {
-          piece = ", sentiment: " + sentiment;
-        }
+        String piece = "";
         pw.printf("Sentence #%d (%d tokens%s):%n", (i + 1), tokens.size(), piece);
 
         String text = sentence.get(CoreAnnotations.TextAnnotation.class);
@@ -111,47 +94,6 @@ public class TextOutputter extends AnnotationOutputter {
         for (CoreLabel token: tokens) {
           pw.print(token.toShorterString(tokenAnnotations));
           pw.println();
-        }
-
-        // display the parse tree for this sentence
-        Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-        if (tree != null) {
-          pw.println();
-          pw.println("Constituency parse: ");
-          options.constituencyTreePrinter.printTree(tree, pw);
-        }
-
-        // display the binary tree for this sentence
-        Tree binaryTree = sentence.get(TreeCoreAnnotations.BinarizedTreeAnnotation.class);
-        if (binaryTree != null) {
-          pw.println();
-          pw.println("Binary Constituency parse: ");
-          options.constituencyTreePrinter.printTree(binaryTree, pw);
-        }
-
-        // display sentiment tree if they asked for sentiment
-        if ( ! StringUtils.isNullOrEmpty(sentiment)) {
-          pw.println();
-          pw.println("Sentiment-annotated binary tree:");
-          Tree sTree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
-          if (sTree != null) {
-            sTree.pennPrint(pw,
-                label -> (label.value() == null) ? "" :
-                    (RNNCoreAnnotations.getPredictedClass(label) != -1) ?
-                        (label.value() + "|sentiment=" + RNNCoreAnnotations.getPredictedClass(label) + "|prob=" +
-                            (String.format("%.3f", RNNCoreAnnotations.getPredictedClassProb(label)))) : label.value());
-            pw.println();
-          }
-        }
-
-        // It is possible to turn off the semantic graphs, in which
-        // case we don't want to recreate them using the dependency
-        // printer.  This might be relevant if using CoreNLP for a
-        // language which doesn't have dependencies, for example.
-        if (sentence.get(SemanticGraphCoreAnnotations.EnhancedPlusPlusDependenciesAnnotation.class) != null) {
-          pw.println();
-          pw.println("Dependency Parse (enhanced plus plus dependencies):");
-          pw.print(sentence.get(SemanticGraphCoreAnnotations.EnhancedPlusPlusDependenciesAnnotation.class).toList());
         }
 
         // display the entity mentions
@@ -176,46 +118,6 @@ public class TextOutputter extends AnnotationOutputter {
           }
         }
 
-        // display MachineReading entities and relations
-        List<EntityMention> entities = sentence.get(MachineReadingAnnotations.EntityMentionsAnnotation.class);
-        if (entities != null) {
-          pw.println();
-          pw.println("Extracted the following MachineReading entity mentions:");
-          for (EntityMention e : entities) {
-            pw.print('\t');
-            pw.println(e);
-          }
-        }
-        List<RelationMention> relations = sentence.get(MachineReadingAnnotations.RelationMentionsAnnotation.class);
-        if (relations != null){
-          pw.println();
-          pw.println("Extracted the following MachineReading relation mentions:");
-          for (RelationMention r: relations) {
-            if (r.printableObject(beam)) {
-              pw.println(r);
-            }
-          }
-        }
-
-        // display OpenIE triples
-        Collection<RelationTriple> openieTriples = sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class);
-        if (openieTriples != null && ! openieTriples.isEmpty()) {
-          pw.println();
-          pw.println("Extracted the following Open IE triples:");
-          for (RelationTriple triple : openieTriples) {
-            pw.println(OpenIE.tripleToString(triple, docId, sentence));
-          }
-        }
-
-        // display KBP triples
-        Collection<RelationTriple> kbpTriples = sentence.get(CoreAnnotations.KBPTriplesAnnotation.class);
-        if (kbpTriples != null && ! kbpTriples.isEmpty()) {
-          pw.println();
-          pw.println("Extracted the following KBP triples:");
-          for (RelationTriple triple : kbpTriples) {
-            pw.println(triple);
-          }
-        }
       }
     } else {
       List<CoreLabel> tokens = annotation.get(CoreAnnotations.TokensAnnotation.class);
@@ -242,38 +144,6 @@ public class TextOutputter extends AnnotationOutputter {
     //String corefAnno = annotation.get(CorefPLAnnotation.class);
     //if(corefAnno != null) os.println(corefAnno);
 
-    // display the new-style coreference graph
-    Map<Integer, CorefChain> corefChains =
-        annotation.get(CorefCoreAnnotations.CorefChainAnnotation.class);
-    if (corefChains != null && sentences != null) {
-      for (CorefChain chain : corefChains.values()) {
-        CorefChain.CorefMention representative =
-            chain.getRepresentativeMention();
-        boolean outputHeading = false;
-        for (CorefChain.CorefMention mention : chain.getMentionsInTextualOrder()) {
-          if (mention == representative &&
-              (!options.printSingletons || chain.getMentionsInTextualOrder().size() > 1))
-            continue;
-          if (!outputHeading) {
-            outputHeading = true;
-            pw.println();
-            pw.println("Coreference set:");
-          }
-          // all offsets start at 1!
-          pw.printf("\t(%d,%d,[%d,%d]) -> (%d,%d,[%d,%d]), that is: \"%s\" -> \"%s\"%n",
-                  mention.sentNum,
-                  mention.headIndex,
-                  mention.startIndex,
-                  mention.endIndex,
-                  representative.sentNum,
-                  representative.headIndex,
-                  representative.startIndex,
-                  representative.endIndex,
-                  mention.mentionSpan,
-                  representative.mentionSpan);
-        }
-      }
-    }
 
     // display quotes if available
     if (annotation.get(CoreAnnotations.QuotationsAnnotation.class) != null) {
@@ -281,14 +151,7 @@ public class TextOutputter extends AnnotationOutputter {
       pw.println("Extracted quotes:");
       List<CoreMap> allQuotes = QuoteAnnotator.gatherQuotes(annotation);
       for (CoreMap quote : allQuotes) {
-        String speakerString;
-        if (quote.get(QuoteAttributionAnnotator.CanonicalMentionAnnotation.class) != null) {
-          speakerString = quote.get(QuoteAttributionAnnotator.CanonicalMentionAnnotation.class);
-        } else if (quote.get(QuoteAttributionAnnotator.SpeakerAnnotation.class) != null) {
-          speakerString = quote.get(QuoteAttributionAnnotator.SpeakerAnnotation.class);
-        } else {
-          speakerString = "Unknown";
-        }
+        String speakerString = "unknown";
         pw.printf("%s:\t%s\t[index=%d, charOffsetBegin=%d]%n",
                 speakerString,
                 quote.get(CoreAnnotations.TextAnnotation.class),

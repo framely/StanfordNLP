@@ -82,11 +82,7 @@ public class Quadruple<T1,T2,T3,T4> implements Comparable<Quadruple<T1,T2,T3,T4>
     if (third != null ? !third.equals(quadruple.third) : quadruple.third != null) {
       return false;
     }
-    if (fourth != null ? !fourth.equals(quadruple.fourth) : quadruple.fourth != null) {
-      return false;
-    }
-
-    return true;
+    return fourth != null ? fourth.equals(quadruple.fourth) : quadruple.fourth == null;
   }
 
   @Override

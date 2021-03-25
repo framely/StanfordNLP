@@ -23,11 +23,11 @@ public class TwoDimensionalSet<K1, K2> implements Serializable, Iterable<Pair<K1
   }
 
   public static <K1, K2> TwoDimensionalSet<K1, K2> treeSet() { 
-    return new TwoDimensionalSet<>(TwoDimensionalMap.<K1, K2, Boolean>treeMap());
+    return new TwoDimensionalSet<>(TwoDimensionalMap.treeMap());
   }
 
   public static <K1, K2> TwoDimensionalSet<K1, K2> hashSet() { 
-    return new TwoDimensionalSet<>(TwoDimensionalMap.<K1, K2, Boolean>hashMap());
+    return new TwoDimensionalSet<>(TwoDimensionalMap.hashMap());
   }
 
   public boolean add(K1 k1, K2 k2) {

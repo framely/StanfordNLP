@@ -18,6 +18,6 @@ public interface BestSequenceFinder {
    *
    * @return The sequence which is scored highest by the SequenceModel
    */
-  public int[] bestSequence(SequenceModel sequenceModel);
+  int[] bestSequence(SequenceModel sequenceModel);
 
 }

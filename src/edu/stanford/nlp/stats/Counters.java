@@ -235,7 +235,7 @@ public class Counters  {
    * @return The key in the Counter with the largest count.
    */
   public static <E> E argmax(Counter<E> c, Comparator<E> tieBreaker) {
-    return argmax(c, tieBreaker, (E) null);
+    return argmax(c, tieBreaker, null);
   }
 
   /**
@@ -2663,12 +2663,12 @@ public class Counters  {
 
       public Set<Entry<E, Double>> entrySet() {
         return new AbstractSet<Entry<E, Double>>() {
-          Set<Entry<E, N>> entries = map.entrySet();
+          final Set<Entry<E, N>> entries = map.entrySet();
 
           @Override
           public Iterator<Entry<E, Double>> iterator() {
             return new Iterator<Entry<E, Double>>() {
-              Iterator<Entry<E, N>> it = entries.iterator();
+              final Iterator<Entry<E, N>> it = entries.iterator();
               Entry<E, N> lastEntry; // = null;
 
               public boolean hasNext() {
@@ -2743,7 +2743,7 @@ public class Counters  {
             // return a HashMap backed by the same numeric type to
             // keep the precision of the returned counter consistent with
             // this one's precision
-            return fromMap(Generics.<E, N>newHashMap(), type);
+            return fromMap(Generics.newHashMap(), type);
           }
         };
       }
@@ -2753,7 +2753,7 @@ public class Counters  {
           @Override
           public Iterator<E> iterator() {
             return new Iterator<E>() {
-              Iterator<E> it = map.keySet().iterator();
+              final Iterator<E> it = map.keySet().iterator();
 
               public boolean hasNext() {
                 return it.hasNext();
@@ -2887,7 +2887,7 @@ public class Counters  {
       @Override
       @SuppressWarnings("unchecked")
       public Double get(Object key) {
-        return counter.getCount((E) key);
+        return counter.getCount(key);
       }
 
       @Override

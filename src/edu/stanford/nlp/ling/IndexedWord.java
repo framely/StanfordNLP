@@ -274,7 +274,7 @@ public class IndexedWord implements AbstractCoreLabel, Comparable<IndexedWord>  
     if (!Double.isNaN(pseudoPosition)) {
       return pseudoPosition;
     } else {
-      return (double) index();
+      return index();
     }
   }
 

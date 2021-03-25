@@ -311,7 +311,7 @@ public class XMLUtils  {
   /**
    * Block-level HTML tags that are rendered with surrounding line breaks.
    */
-  private static final Set<String> breakingTags = Generics.newHashSet(Arrays.asList(new String[] {"blockquote", "br", "div", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "li", "ol", "p", "pre", "ul", "tr", "td"}));
+  private static final Set<String> breakingTags = Generics.newHashSet(Arrays.asList("blockquote", "br", "div", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "li", "ol", "p", "pre", "ul", "tr", "td"));
 
   /**
    * @param r       the reader to read the XML/HTML from

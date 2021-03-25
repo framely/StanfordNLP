@@ -7,7 +7,7 @@ package edu.stanford.nlp.util;
  * @version 4/17/01
  */
 public interface DisjointSet<T> {
-  public T find(T o);
+  T find(T o);
 
-  public void union(T a, T b);
+  void union(T a, T b);
 }

@@ -25,7 +25,7 @@ import edu.stanford.nlp.util.AbstractIterator;
  */
 public class DelimitRegExIterator<T> extends AbstractIterator<T> {
 
-  private Iterator<String> tokens;
+  private final Iterator<String> tokens;
   private final Function<String,T> op;
   private T nextToken; // = null;
 
@@ -55,7 +55,7 @@ public class DelimitRegExIterator<T> extends AbstractIterator<T> {
         prev = m.end();
       }
       if (prev < line.length()) { // Except empty last part
-        toks.add(line.substring(prev, line.length()));
+        toks.add(line.substring(prev));
       }
       tokens = toks.iterator();
     } catch (IOException e) {

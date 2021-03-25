@@ -233,24 +233,21 @@ public class WordToSentenceProcessor<IN> implements ListProcessor<IN, List<IN>> 
    *  @return Whether it's plausible to add because there was an open quote
    */
   private boolean plausibleToAdd(List<IN> lastSentence, String word) {
-    if (!word.equals("\"") && !word.equals("\'")) {
+    if (!word.equals("\"") && !word.equals("'")) {
       return true;
     }
     int singleQuoteCount = 0;
     int doubleQuoteCount = 0;
     for (IN lastWord : lastSentence) {
       String lastStr = ((Label) lastWord).value();
-      if (lastStr.equals("\'"))
+      if (lastStr.equals("'"))
         singleQuoteCount += 1;
       if (lastStr.equals("\""))
         doubleQuoteCount += 1;
     }
     if (word.equals("\"") && (doubleQuoteCount % 2 != 0))
       return true;
-    else if (word.equals("\'") && (singleQuoteCount % 2 != 0))
-      return true;
-    else
-      return false;
+    else return word.equals("'") && (singleQuoteCount % 2 != 0);
   }
 
   /**

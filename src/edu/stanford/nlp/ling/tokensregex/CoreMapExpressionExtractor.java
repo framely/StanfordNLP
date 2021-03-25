@@ -135,10 +135,10 @@ public class CoreMapExpressionExtractor<T extends MatchedExpression>  {
     this.env = env;
     this.tokensAnnotationKey = EnvLookup.getDefaultTokensAnnotationKey(env);
     if (env != null) {
-      this.collapseExtractionRules = Objects.equals((Boolean) env.get("collapseExtractionRules"), true);
+      this.collapseExtractionRules = Objects.equals(env.get("collapseExtractionRules"), true);
       if (env.get("verbose") != null)
         verbose =  (env.get("verbose") != null) &&
-                Objects.equals((Boolean) env.get("verbose"), true);
+                Objects.equals(env.get("verbose"), true);
     } else {
       this.collapseExtractionRules = false;
     }

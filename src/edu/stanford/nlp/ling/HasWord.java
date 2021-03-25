@@ -15,7 +15,7 @@ public interface HasWord extends Serializable {
    *
    * @return String the word value for the label
    */
-  public String word();
+  String word();
 
 
   /**
@@ -23,6 +23,6 @@ public interface HasWord extends Serializable {
    *
    * @param word The word value for the label
    */
-  public void setWord(String word);
+  void setWord(String word);
 
 }

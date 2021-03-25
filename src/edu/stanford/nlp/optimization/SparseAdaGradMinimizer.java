@@ -19,7 +19,7 @@ import java.util.Random;
 public class SparseAdaGradMinimizer<K, F extends SparseOnlineFunction<K>> implements SparseMinimizer<K, F>  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(SparseAdaGradMinimizer.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(SparseAdaGradMinimizer.class);
   public boolean quiet = false;
 
   protected int numPasses;
@@ -101,7 +101,7 @@ public class SparseAdaGradMinimizer<K, F extends SparseOnlineFunction<K>> implem
 		  double testupdate = x.getCount(feature) - (currentrate * gradient.getCount(feature));
 		  double lastUpdateTimeStep = lastUpdated.getCount(feature);
 		  double idleinterval = timeStep - lastUpdateTimeStep - 1;
-		  lastUpdated.setCount(feature, (double) timeStep);
+		  lastUpdated.setCount(feature, timeStep);
 
 		  // does lazy update using idleinterval
 		  double trunc = Math

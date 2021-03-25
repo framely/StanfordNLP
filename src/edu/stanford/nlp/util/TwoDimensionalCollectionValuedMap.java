@@ -19,7 +19,7 @@ public class TwoDimensionalCollectionValuedMap<K1, K2, V> implements Serializabl
 
   private static final long serialVersionUID = 1L;
 
-  private Map<K1,CollectionValuedMap<K2, V>> map = Generics.newHashMap();
+  private final Map<K1,CollectionValuedMap<K2, V>> map = Generics.newHashMap();
   protected MapFactory<K2, Collection<V>> mf;
   protected CollectionFactory<V> cf;
   private final boolean treatCollectionsAsImmutable;
@@ -41,7 +41,7 @@ public class TwoDimensionalCollectionValuedMap<K1, K2, V> implements Serializabl
    * @param treatCollectionsAsImmutable whether or not to treat collections as immutable
    */
   public TwoDimensionalCollectionValuedMap(boolean treatCollectionsAsImmutable) {
-    this(MapFactory.<K2,Collection<V>>hashMapFactory(), CollectionFactory.<V>hashSetFactory(), treatCollectionsAsImmutable);
+    this(MapFactory.hashMapFactory(), CollectionFactory.hashSetFactory(), treatCollectionsAsImmutable);
   }
 
 
@@ -53,7 +53,7 @@ public class TwoDimensionalCollectionValuedMap<K1, K2, V> implements Serializabl
    * Collections in each mapping
    */
   public TwoDimensionalCollectionValuedMap(CollectionFactory<V> cf) {
-    this(MapFactory.<K2,Collection<V>>hashMapFactory(), cf, false);
+    this(MapFactory.hashMapFactory(), cf, false);
   }
 
   /**

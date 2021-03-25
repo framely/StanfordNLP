@@ -11,12 +11,12 @@ import java.io.Reader;
  * @author Angel Chang
  */
 public interface AnnotationCreator {
-  public Annotation createFromText(String text) throws IOException;
+  Annotation createFromText(String text) throws IOException;
 
-  public Annotation createFromFile(String filename) throws IOException;
-  public Annotation createFromFile(File file) throws IOException;
+  Annotation createFromFile(String filename) throws IOException;
+  Annotation createFromFile(File file) throws IOException;
 
-  public Annotation create(InputStream stream) throws IOException;
-  public Annotation create(InputStream stream, java.lang.String encoding) throws IOException;
-  public Annotation create(Reader reader)  throws IOException;
+  Annotation create(InputStream stream) throws IOException;
+  Annotation create(InputStream stream, java.lang.String encoding) throws IOException;
+  Annotation create(Reader reader)  throws IOException;
 }

@@ -29,16 +29,16 @@ public class TwoDimensionalCounter<K1, K2> implements TwoDimensionalCounterInter
   private static final long serialVersionUID = 1L;
 
   // the outermost Map
-  private Map<K1, ClassicCounter<K2>> map;
+  private final Map<K1, ClassicCounter<K2>> map;
 
   // the total of all counts
   private double total;
 
   // the MapFactory used to make new maps to counters
-  private MapFactory<K1, ClassicCounter<K2>> outerMF;
+  private final MapFactory<K1, ClassicCounter<K2>> outerMF;
 
   // the MapFactory used to make new maps in the inner counter
-  private MapFactory<K2, MutableDouble> innerMF;
+  private final MapFactory<K2, MutableDouble> innerMF;
 
   private double defaultValue = 0.0;
 
@@ -226,7 +226,7 @@ public class TwoDimensionalCounter<K1, K2> implements TwoDimensionalCounterInter
   @SuppressWarnings( { "unchecked" })
   public static <K1, K2> TwoDimensionalCounter<K2, K1> reverseIndexOrder(TwoDimensionalCounter<K1, K2> cc) {
     // they typing on the outerMF is violated a bit, but it'll work....
-    TwoDimensionalCounter<K2, K1> result = new TwoDimensionalCounter<>((MapFactory) cc.outerMF,
+    TwoDimensionalCounter<K2, K1> result = new TwoDimensionalCounter<>(cc.outerMF,
             (MapFactory) cc.innerMF);
 
     for (K1 key1 : cc.firstKeySet()) {
@@ -443,7 +443,7 @@ public class TwoDimensionalCounter<K1, K2> implements TwoDimensionalCounterInter
   }
 
   public TwoDimensionalCounter() {
-    this(MapFactory.<K1, ClassicCounter<K2>> hashMapFactory(), MapFactory.<K2, MutableDouble> hashMapFactory());
+    this(MapFactory.hashMapFactory(), MapFactory.hashMapFactory());
   }
 
   public TwoDimensionalCounter(MapFactory<K1, ClassicCounter<K2>> outerFactory,
@@ -455,7 +455,7 @@ public class TwoDimensionalCounter<K1, K2> implements TwoDimensionalCounterInter
   }
 
   public static <K1, K2> TwoDimensionalCounter<K1, K2> identityHashMapCounter() {
-    return new TwoDimensionalCounter<>(MapFactory.<K1, ClassicCounter<K2>>identityHashMapFactory(), MapFactory.<K2, MutableDouble>identityHashMapFactory());
+    return new TwoDimensionalCounter<>(MapFactory.identityHashMapFactory(), MapFactory.identityHashMapFactory());
   }
 
   public void recomputeTotal(){

@@ -15,6 +15,6 @@ public interface Featurizable<F> {
   /**
    * returns Object as a Collection of its features
    */
-  public Collection<F> asFeatures();
+  Collection<F> asFeatures();
 
 }

@@ -67,7 +67,7 @@ public class WordToTaggedWordProcessor<IN extends HasWord, L, F> extends Abstrac
       return w;
     }
     String word = s.substring(0, split);
-    String tag = s.substring(split + 1, s.length());
+    String tag = s.substring(split + 1);
     return new TaggedWord(word, tag);
   }
 

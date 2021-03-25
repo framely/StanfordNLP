@@ -844,7 +844,7 @@ public class Distribution<E> implements Sampler<E>, ProbabilityDistribution<E>  
     for (int i = 1; i < 5; i++) {
       System.out.printf("%10d ", Math.round(p / i));
       String in = String.valueOf(i);
-      System.out.printf("%10.8f ", n.probabilityOf(String.valueOf(in)));
+      System.out.printf("%10.8f ", n.probabilityOf(in));
       System.out.printf("%10.8f ", add1.probabilityOf(in));
       System.out.printf("%10.8f ", dir1.probabilityOf(in));
       System.out.printf("%10.8f ", dir2.probabilityOf(in));

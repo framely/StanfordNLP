@@ -35,8 +35,8 @@ public class ScaledSGDMinimizer<Q extends AbstractStochasticCachingDiffFunction>
   public double[] diag;
 
   private double fixedGain = 0.99;
-  private static int pairMem = 20;
-  private double aMax = 1e6;
+  private static final int pairMem = 20;
+  private final double aMax = 1e6;
 
 
   public double tuneFixedGain(edu.stanford.nlp.optimization.Function function, double[] initial, long msPerTest,double fixedStart){
@@ -174,7 +174,7 @@ public class ScaledSGDMinimizer<Q extends AbstractStochasticCachingDiffFunction>
     say(" A ");
     double[] s;
     double[] y;
-    if (pairMem > 0 && sList.size() == pairMem || sList.size() == pairMem) {
+    if (sList.size() == pairMem) {
       s = sList.remove(0);
       y = yList.remove(0);
     } else {

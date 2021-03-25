@@ -1,25 +1,9 @@
 package edu.stanford.nlp.pipeline;
 
-import edu.stanford.nlp.coref.CorefCoreAnnotations;
-import edu.stanford.nlp.coref.data.CorefChain;
-import edu.stanford.nlp.ie.machinereading.structure.Span;
-import edu.stanford.nlp.ie.util.RelationTriple;
+
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.io.StringOutputStream;
-import edu.stanford.nlp.ling.CoreAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.IndexedWord;
-import edu.stanford.nlp.naturalli.NaturalLogicAnnotations;
-import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
-import edu.stanford.nlp.semgraph.SemanticGraph;
-import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
-import edu.stanford.nlp.semgraph.SemanticGraphEdge;
-import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
-import edu.stanford.nlp.time.TimeAnnotations;
-import edu.stanford.nlp.time.Timex;
-import edu.stanford.nlp.trees.Tree;
-import edu.stanford.nlp.trees.TreeCoreAnnotations;
-import edu.stanford.nlp.trees.TreePrint;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.Pair;
 import edu.stanford.nlp.util.Pointer;
@@ -37,7 +21,6 @@ import java.util.stream.Stream;
  * Output an Annotation to human readable JSON.
  * This is not a lossless operation; for more strict serialization,
  * see {@link edu.stanford.nlp.pipeline.AnnotationSerializer}; e.g.,
- * {@link edu.stanford.nlp.pipeline.ProtobufAnnotationSerializer}.
  *
  * @author Gabor Angeli
  */
@@ -80,60 +63,12 @@ public class JSONOutputter extends AnnotationOutputter {
           l2.set("speaker", sentence.get(CoreAnnotations.SpeakerAnnotation.class));
           l2.set("speakerType", sentence.get(CoreAnnotations.SpeakerTypeAnnotation.class));
           // (constituency tree)
-          StringWriter treeStrWriter = new StringWriter();
-          TreePrint treePrinter = options.constituencyTreePrinter;
-          if (treePrinter == AnnotationOutputter.DEFAULT_CONSTITUENCY_TREE_PRINTER) {
-            // note the '==' -- we're overwriting the default, but only if it was not explicitly set otherwise
-            treePrinter = new TreePrint("oneline");
-          }
-          treePrinter.printTree(sentence.get(TreeCoreAnnotations.TreeAnnotation.class), new PrintWriter(treeStrWriter, true));
-          String treeStr = treeStrWriter.toString().trim();  // strip the trailing newline
-          if (!"SENTENCE_SKIPPED_OR_UNPARSABLE".equals(treeStr)) {
-            l2.set("parse", treeStr);
-          }
-          // binary tree (if present)
-          if (sentence.get(TreeCoreAnnotations.BinarizedTreeAnnotation.class) != null) {
-            StringWriter binaryTreeStrWriter = new StringWriter();
-            TreePrint binaryTreePrinter = options.constituencyTreePrinter;
-            if (binaryTreePrinter == AnnotationOutputter.DEFAULT_CONSTITUENCY_TREE_PRINTER) {
-              binaryTreePrinter = new TreePrint("oneline");
-            }
-            binaryTreePrinter.printTree(sentence.get(TreeCoreAnnotations.BinarizedTreeAnnotation.class),
-                    new PrintWriter(binaryTreeStrWriter, true));
-            String binaryTreeStr = binaryTreeStrWriter.toString().trim();
-            if (!"SENTENCE_SKIPPED_OR_UNPARSABLE".equals(binaryTreeStr)) {
-              l2.set("binaryParse", binaryTreeStr);
-            }
-          }
+
           // (dependency trees)
-          l2.set("basicDependencies", buildDependencyTree(sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)));
-          l2.set("enhancedDependencies", buildDependencyTree(sentence.get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class)));
-          l2.set("enhancedPlusPlusDependencies", buildDependencyTree(sentence.get(SemanticGraphCoreAnnotations.EnhancedPlusPlusDependenciesAnnotation.class)));
-          // (sentiment)
-          Tree sentimentTree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
-          if (sentimentTree != null) {
-            int sentiment = RNNCoreAnnotations.getPredictedClass(sentimentTree);
-            List<Double> sentimentPredictions =
-                RNNCoreAnnotations.getPredictionsAsStringList(sentimentTree);
-            String sentimentClass = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-            l2.set("sentimentValue", Integer.toString(sentiment));
-            l2.set("sentiment", sentimentClass.replaceAll(" ", ""));
-            l2.set("sentimentDistribution", sentimentPredictions);
-            StringWriter sentimentTreeStringWriter = new StringWriter();
-            sentimentTree.pennPrint(new PrintWriter(sentimentTreeStringWriter),
-                label -> (label.value() == null) ? "" :
-                    (RNNCoreAnnotations.getPredictedClass(label) != -1) ?
-                        (label.value() + "|sentiment=" + RNNCoreAnnotations.getPredictedClass(label) + "|prob=" +
-                            (String.format("%.3f", RNNCoreAnnotations.getPredictedClassProb(label)))) : label.value());
-            String treeString = sentimentTreeStringWriter.toString();
-            l2.set("sentimentTree", treeString.trim());
-          }
+
           // (openie)
-          Collection<RelationTriple> openIETriples = sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class);
-          writeTriples(l2, "openie", openIETriples);
           // (kbp)
-          Collection<RelationTriple> kbpTriples = sentence.get(CoreAnnotations.KBPTriplesAnnotation.class);
-          writeTriples(l2, "kbp", kbpTriples);
+
 
           // (entity mentions)
           if (sentence.get(CoreAnnotations.MentionsAnnotation.class) != null) {
@@ -157,7 +92,6 @@ public class JSONOutputter extends AnnotationOutputter {
               //l3.set("pos", m.get(CoreAnnotations.PartOfSpeechAnnotation.class));
               l3.set("ner", m.get(CoreAnnotations.NamedEntityTagAnnotation.class));
               l3.set("normalizedNER", m.get(CoreAnnotations.NormalizedNamedEntityTagAnnotation.class));
-              l3.set("entitylink", m.get(CoreAnnotations.WikipediaEntityAnnotation.class));
               // add ner confidence info if there is any to report
               Map<String,Double> nerConfidences = m.get(CoreAnnotations.NamedEntityTagProbsAnnotation.class);
               List<String> nerLabelsWithConfidences =
@@ -171,8 +105,6 @@ public class JSONOutputter extends AnnotationOutputter {
                 });
               }
               // Timex
-              Timex time = m.get(TimeAnnotations.TimexAnnotation.class);
-              writeTime(l3, time);
             }));
           }
 
@@ -200,10 +132,8 @@ public class JSONOutputter extends AnnotationOutputter {
               l3.set("truecaseText", token.get(CoreAnnotations.TrueCaseTextAnnotation.class));
               l3.set("before", token.get(CoreAnnotations.BeforeAnnotation.class));
               l3.set("after", token.get(CoreAnnotations.AfterAnnotation.class));
-              l3.set("entitylink", token.get(CoreAnnotations.WikipediaEntityAnnotation.class));
               // Timex
-              Timex time = token.get(TimeAnnotations.TimexAnnotation.class);
-              writeTime(l3, time);
+
             }));
           }
         }));
@@ -221,31 +151,6 @@ public class JSONOutputter extends AnnotationOutputter {
       }
 
       // Add coref values
-      if (doc.get(CorefCoreAnnotations.CorefChainAnnotation.class) != null) {
-        Map<Integer, CorefChain> corefChains =
-            doc.get(CorefCoreAnnotations.CorefChainAnnotation.class);
-        if (corefChains != null) {
-          l1.set("corefs", (Consumer<Writer>) chainWriter -> {
-            for (CorefChain chain : corefChains.values()) {
-              CorefChain.CorefMention representative = chain.getRepresentativeMention();
-              chainWriter.set(Integer.toString(chain.getChainID()), chain.getMentionsInTextualOrder().stream().map(mention -> (Consumer<Writer>) (Writer mentionWriter) -> {
-                mentionWriter.set("id", mention.mentionID);
-                mentionWriter.set("text", mention.mentionSpan);
-                mentionWriter.set("type", mention.mentionType);
-                mentionWriter.set("number", mention.number);
-                mentionWriter.set("gender", mention.gender);
-                mentionWriter.set("animacy", mention.animacy);
-                mentionWriter.set("startIndex", mention.startIndex);
-                mentionWriter.set("endIndex", mention.endIndex);
-                mentionWriter.set("headIndex", mention.headIndex);
-                mentionWriter.set("sentNum", mention.sentNum);
-                mentionWriter.set("position", Arrays.stream(mention.position.elems()).boxed().collect(Collectors.toList()));
-                mentionWriter.set("isRepresentativeMention", mention == representative);
-              }));
-            }
-          });
-        }
-      }
 
       // quotes
       if (doc.get(CoreAnnotations.QuotationsAnnotation.class) != null) {
@@ -259,15 +164,6 @@ public class JSONOutputter extends AnnotationOutputter {
           l2.set("endToken", quote.get(CoreAnnotations.TokenEndAnnotation.class));
           l2.set("beginSentence", quote.get(CoreAnnotations.SentenceBeginAnnotation.class));
           l2.set("endSentence", quote.get(CoreAnnotations.SentenceEndAnnotation.class));
-          l2.set("speaker",
-              quote.get(QuoteAttributionAnnotator.SpeakerAnnotation.class) != null ?
-                  quote.get(QuoteAttributionAnnotator.SpeakerAnnotation.class) :
-                  "Unknown");
-          l2.set("canonicalSpeaker",
-              quote.get(QuoteAttributionAnnotator.CanonicalMentionAnnotation.class) != null ?
-                  quote.get(QuoteAttributionAnnotator.CanonicalMentionAnnotation.class) :
-                  "Unknown");
-
         }));
       }
 
@@ -301,65 +197,10 @@ public class JSONOutputter extends AnnotationOutputter {
     l0.flush();  // flush
   }
 
-  private static void writeTriples(Writer l2, String key, Collection<RelationTriple> triples) {
-    if (triples != null) {
-      l2.set(key, triples.stream().map(triple -> (Consumer<Writer>) (Writer tripleWriter) -> {
-        tripleWriter.set("subject", triple.subjectGloss());
-        tripleWriter.set("subjectSpan", Span.fromPair(triple.subjectTokenSpan()));
-        tripleWriter.set("relation", triple.relationGloss());
-        tripleWriter.set("relationSpan", Span.fromPair(triple.relationTokenSpan()));
-        tripleWriter.set("object", triple.objectGloss());
-        tripleWriter.set("objectSpan", Span.fromPair(triple.objectTokenSpan()));
-      }));
-    }
-  }
-
-  private static void writeTime(Writer l3, Timex time) {
-    if (time != null) {
-      Timex.Range range = time.range();
-      l3.set("timex", (Consumer<Writer>) l4 -> {
-        l4.set("tid", time.tid());
-        l4.set("type", time.timexType());
-        l4.set("value", time.value());
-        l4.set("altValue", time.altVal());
-        l4.set("range", (range != null)? (Consumer<Writer>) l5 -> {
-          l5.set("begin", range.begin);
-          l5.set("end", range.end);
-          l5.set("duration", range.duration);
-        } : null);
-      });
-    }
-  }
 
   /**
    * Convert a dependency graph to a format expected as input to {@link Writer#set(String, Object)}.
    */
-  @SuppressWarnings({"RedundantCast", "RedundantSuppression"})
-  // It's lying; we need the "redundant" casts (as of 2014-09-08)
-  private static Object buildDependencyTree(SemanticGraph graph) {
-    if(graph != null) {
-      return Stream.concat(
-          // Roots
-          graph.getRoots().stream().map( (IndexedWord root) -> (Consumer<Writer>) dep -> {
-            dep.set("dep", "ROOT");
-            dep.set("governor", 0);
-            dep.set("governorGloss", "ROOT");
-            dep.set("dependent", root.index());
-            dep.set("dependentGloss", root.word());
-          }),
-          // Regular edges
-          graph.edgeListSorted().stream().map( (SemanticGraphEdge edge) -> (Consumer<Writer>) (Writer dep) -> {
-            dep.set("dep", edge.getRelation().toString());
-            dep.set("governor", edge.getGovernor().index());
-            dep.set("governorGloss", edge.getGovernor().word());
-            dep.set("dependent", edge.getDependent().index());
-            dep.set("dependentGloss", edge.getDependent().word());
-          })
-      );
-    } else {
-      return null;
-    }
-  }
 
   public static String jsonPrint(Annotation annotation) throws IOException {
     StringOutputStream os = new StringOutputStream();
@@ -423,12 +264,6 @@ public class JSONOutputter extends AnnotationOutputter {
         writer.write("\"");
       } else if (value instanceof Pair) {
         routeObject(indent, Arrays.asList(((Pair) value).first, ((Pair) value).second));
-      } else if (value instanceof Span) {
-        writer.write("[");
-        writer.write(Integer.toString(((Span) value).start()));
-        writer.write(","); space();
-        writer.write(Integer.toString(((Span) value).end()));
-        writer.write("]");
       } else if (value instanceof Consumer) {
         object(indent, (Consumer<Writer>) value);
       } else if (value instanceof Stream) {

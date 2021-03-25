@@ -15,7 +15,7 @@ import java.util.*;
 public class BinaryHeapPriorityQueue<E> extends AbstractSet<E> implements PriorityQueue<E>, Iterator<E>  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(BinaryHeapPriorityQueue.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(BinaryHeapPriorityQueue.class);
 
   /**
    * An {@code Entry} stores an object in the queue along with
@@ -435,7 +435,7 @@ public class BinaryHeapPriorityQueue<E> extends AbstractSet<E> implements Priori
   }
 
   public BinaryHeapPriorityQueue<E> deepCopy() {
-    return deepCopy(MapFactory.<E,Entry<E>>hashMapFactory());
+    return deepCopy(MapFactory.hashMapFactory());
   }
 
   @Override
@@ -506,11 +506,11 @@ public class BinaryHeapPriorityQueue<E> extends AbstractSet<E> implements Priori
 
 
   public BinaryHeapPriorityQueue() {
-    this(MapFactory.<E,Entry<E>>hashMapFactory());
+    this(MapFactory.hashMapFactory());
   }
 
   public BinaryHeapPriorityQueue(int initCapacity) {
-	  this(MapFactory.<E,Entry<E>>hashMapFactory(),initCapacity);
+	  this(MapFactory.hashMapFactory(),initCapacity);
   }
 
   public BinaryHeapPriorityQueue(MapFactory<E, Entry<E>> mapFactory) {

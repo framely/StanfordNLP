@@ -1,10 +1,10 @@
 package edu.stanford.nlp.pipeline; 
+import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import edu.stanford.nlp.util.logging.Redwood;
 
 import java.util.*;
 
 import edu.stanford.nlp.ling.*;
-import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import edu.stanford.nlp.util.*;
 import edu.stanford.nlp.util.concurrent.MulticoreWrapper;
 import edu.stanford.nlp.util.concurrent.ThreadsafeProcessor;
@@ -17,7 +17,7 @@ import edu.stanford.nlp.util.concurrent.ThreadsafeProcessor;
 public class POSTaggerAnnotator implements Annotator  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(POSTaggerAnnotator.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(POSTaggerAnnotator.class);
 
   private final MaxentTagger pos;
 

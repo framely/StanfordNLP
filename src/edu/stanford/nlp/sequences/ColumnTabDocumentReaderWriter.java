@@ -49,13 +49,13 @@ import java.util.regex.Pattern;
 public class ColumnTabDocumentReaderWriter<IN extends CoreMap> implements DocumentReaderAndWriter<IN>  {
 
   /** A logger for this class */
-  private static Redwood.RedwoodChannels log = Redwood.channels(ColumnTabDocumentReaderWriter.class);
+  private static final Redwood.RedwoodChannels log = Redwood.channels(ColumnTabDocumentReaderWriter.class);
 
   private static final long serialVersionUID = 1;
 
   private String[] map; // = null;
   private Pattern delimiterPattern = Pattern.compile("\t");
-  private Pattern whitespacePattern = Pattern.compile("\\s");
+  private final Pattern whitespacePattern = Pattern.compile("\\s");
   private boolean replaceWhitespace = true;
   private String tokensAnnotationClassName;
   private CoreTokenFactory<IN> tokenFactory;
@@ -174,7 +174,7 @@ public class ColumnTabDocumentReaderWriter<IN extends CoreMap> implements Docume
 
     public boolean hasNext() {
       return nextItem != null;
-    };
+    }
 
     public E next() {
       if (nextItem == null) {
@@ -219,7 +219,7 @@ public class ColumnTabDocumentReaderWriter<IN extends CoreMap> implements Docume
   }
 
   private class ColumnDocBufferedGetNext implements GetNextFunction<Annotation> {
-    private BufferedReader br;
+    private final BufferedReader br;
     boolean includeText = false;
     boolean keepBoundaries = false;
     boolean returnTokensOnEmptyLine = true;
@@ -372,7 +372,7 @@ public class ColumnTabDocumentReaderWriter<IN extends CoreMap> implements Docume
               if (info.length == map.length) {
                 wi = tokenFactory.makeToken(map, info);
               } else {
-                wi = tokenFactory.makeToken(map, Arrays.asList(info).subList(0, map.length).toArray(new String[map.length]));
+                wi = tokenFactory.makeToken(map, Arrays.copyOf(info, map.length));
               }
               words.add(wi);
             }

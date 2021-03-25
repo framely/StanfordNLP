@@ -92,7 +92,7 @@ public class TrieMapMatcher<K,V> {
    * @return List of approximate matches
    */
   public List<ApproxMatch<K,V>> findClosestMatches(List<K> target, int n) {
-    return findClosestMatches(target, TrieMapMatcher.<K,V>defaultCost(), Double.MAX_VALUE, n, false, false);
+    return findClosestMatches(target, TrieMapMatcher.defaultCost(), Double.MAX_VALUE, n, false, false);
   }
 
   /**
@@ -106,7 +106,7 @@ public class TrieMapMatcher<K,V> {
    * @return List of approximate matches
    */
   public List<ApproxMatch<K,V>> findClosestMatches(List<K> target, int n, boolean multimatch, boolean keepAlignments) {
-    return findClosestMatches(target, TrieMapMatcher.<K,V>defaultCost(), Double.MAX_VALUE, n, multimatch, keepAlignments);
+    return findClosestMatches(target, TrieMapMatcher.defaultCost(), Double.MAX_VALUE, n, multimatch, keepAlignments);
   }
 
   /**
@@ -557,9 +557,7 @@ public class TrieMapMatcher<K,V> {
 
       if (lastMultimatchedMatchedStartIndex != that.lastMultimatchedMatchedStartIndex) return false;
       if (lastMultimatchedOriginalStartIndex != that.lastMultimatchedOriginalStartIndex) return false;
-      if (trie != null ? !trie.equals(that.trie) : that.trie != null) return false;
-
-      return true;
+      return trie != null ? trie.equals(that.trie) : that.trie == null;
     }
 
     @Override
@@ -604,7 +602,7 @@ public class TrieMapMatcher<K,V> {
 
     public List<PartialApproxMatch<K,V>> toSortedList() {
       List<PartialApproxMatch<K,V>> res = queue.valuesList();
-      res.sort(TrieMapMatcher.<K, V>partialMatchComparator());
+      res.sort(TrieMapMatcher.partialMatchComparator());
       return res;
     }
   }
@@ -652,7 +650,7 @@ public class TrieMapMatcher<K,V> {
       for (BoundedCostOrderedMap<Match<K,V>, PartialApproxMatch<K,V>> q:multimatchQueues.values()) {
         all.addAll(q.valuesList());
       }
-      all.sort(TrieMapMatcher.<K, V>partialMatchComparator());
+      all.sort(TrieMapMatcher.partialMatchComparator());
       return all;
     }
   }

@@ -6,5 +6,5 @@ package edu.stanford.nlp.optimization;
  * @author Mengqiu Wang
  */
 public interface HasFeatureGrouping {
-  public int[][] getFeatureGrouping();
+  int[][] getFeatureGrouping();
 }

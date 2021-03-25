@@ -12,10 +12,10 @@ import edu.stanford.nlp.util.CoreMap;
  * @param <IN> Token type this factory creates
  */
 public interface CoreTokenFactory<IN extends CoreMap> {
-  public IN makeToken();
+  IN makeToken();
 
-  public IN makeToken(String[] keys, String[] values);
+  IN makeToken(String[] keys, String[] values);
 
-  public IN makeToken(IN tokenToBeCopied);
+  IN makeToken(IN tokenToBeCopied);
 
 }

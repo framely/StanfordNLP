@@ -42,7 +42,7 @@ public class Iterables {
       final Iterable<K> iterable, final Function<? super K,? extends V> function) {
 
     return ()-> { return new Iterator<V>() {
-          Iterator<K> inner = iterable.iterator();
+          final Iterator<K> inner = iterable.iterator();
 
           public boolean hasNext() {
             return inner.hasNext();
@@ -68,7 +68,7 @@ public class Iterables {
     return new Iterable<T>() {
       public Iterator<T> iterator() {
         return new Iterator<T>() {
-          Iterator<T> inner = iterable.iterator();
+          final Iterator<T> inner = iterable.iterator();
 
           boolean queued = false;
           T next = null;
@@ -119,7 +119,7 @@ public class Iterables {
       final Iterable<?> iterable, final Class<? extends T> type) {
 
     return ()-> { return new Iterator<T>() {
-          Iterator<?> inner = iterable.iterator();
+          final Iterator<?> inner = iterable.iterator();
 
           public boolean hasNext() {
             return inner.hasNext();
@@ -306,7 +306,7 @@ public class Iterables {
    * iterable ends.
    */
   public static <T1,T2> Iterable<Pair<T1,T2>> zip(
-      Iterable<T1> iter, T2 array[]) {
+          Iterable<T1> iter, T2[] array) {
 
     return zip(iter, Arrays.asList(array));
   }
@@ -317,7 +317,7 @@ public class Iterables {
    * iterable ends.
    */
   public static <T1, T2> Iterable<Pair<T1,T2>> zip(
-      T1 array[], Iterable<T2> iter) {
+          T1[] array, Iterable<T2> iter) {
 
     return zip(Arrays.asList(array), iter);
   }
@@ -328,7 +328,7 @@ public class Iterables {
    * iterable ends.
    */
   public static <T1, T2> Iterable<Pair<T1,T2>> zip(
-      T1 array1[], T2 array2[]) {
+          T1[] array1, T2[] array2) {
 
     return zip(Arrays.asList(array1), Arrays.asList(array2));
   }
@@ -369,7 +369,7 @@ public class Iterables {
      * +1 if the value of b should come before the value of a, or 0 if
      * the two should be merged together.
      */
-    public int compare(V1 a, V2 b);
+    int compare(V1 a, V2 b);
   }
 
   /**
@@ -390,8 +390,8 @@ public class Iterables {
       final IncrementComparator<V1,V2> comparator) {
 
     return new Iterable<Pair<V1,V2>>() {
-      Iterator<V1> iterA = iter1.iterator();
-      Iterator<V2> iterB = iter2.iterator();
+      final Iterator<V1> iterA = iter1.iterator();
+      final Iterator<V2> iterB = iter2.iterator();
 
       public Iterator<Pair<V1, V2>> iterator() {
         return new Iterator<Pair<V1,V2>>() {
@@ -521,7 +521,7 @@ public class Iterables {
       public Iterator<Iterable<V>> iterator() {
         return new Iterator<Iterable<V>>() {
           /** Actual iterator */
-          Iterator<V> it = iterable.iterator();
+          final Iterator<V> it = iterable.iterator();
 
           /** Next element to return */
           V next;
@@ -705,7 +705,7 @@ public class Iterables {
 
     System.out.println(asHashSet(l.iterator()));
 
-    System.out.println(asCollection(l.iterator(), CollectionFactory.<String>hashSetFactory()));
+    System.out.println(asCollection(l.iterator(), CollectionFactory.hashSetFactory()));
 
     ArrayList<String> al = new ArrayList<>();
     al.add("d");

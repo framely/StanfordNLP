@@ -64,9 +64,7 @@ public class MultiMatch<K,V> extends Match<K,V> {
 
     MultiMatch that = (MultiMatch) o;
 
-    if (multimatches != null ? !multimatches.equals(that.multimatches) : that.multimatches != null) return false;
-
-    return true;
+    return multimatches != null ? multimatches.equals(that.multimatches) : that.multimatches == null;
   }
 
   public String toString() {

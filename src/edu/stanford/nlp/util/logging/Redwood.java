@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -824,7 +825,7 @@ public class Redwood  {
     //(known at creation)
     public final long thread = Thread.currentThread().getId();
     //(state)
-    private boolean channelsSorted = false;
+    private final boolean channelsSorted = false;
 
     /**
      * Create a new Record, based on the content of the log, the channels, and
@@ -933,7 +934,7 @@ public class Redwood  {
 
     public FileHandler(String filename) {
       try {
-        printWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8")));
+        printWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), StandardCharsets.UTF_8)));
       } catch (IOException e) {
         Redwood.log(Flag.ERROR, e);
       }

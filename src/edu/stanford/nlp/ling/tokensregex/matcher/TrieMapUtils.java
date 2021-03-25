@@ -19,19 +19,19 @@ import java.util.Set;
  */
 public class TrieMapUtils {
   public static <K> Counter<Iterable<K>> trieMapCounter() {
-    return new ClassicCounter<>(TrieMapUtils.<K, MutableDouble>trieMapFactory());
+    return new ClassicCounter<>(TrieMapUtils.trieMapFactory());
   }
 
   public static <K,V> CollectionValuedMap<Iterable<K>, V> collectionValuedTrieMap() {
     return new CollectionValuedMap<>(
-            TrieMapUtils.<K, Collection<V>>trieMapFactory(),
-            CollectionFactory.<V>hashSetFactory(),
+            TrieMapUtils.trieMapFactory(),
+            CollectionFactory.hashSetFactory(),
             false);
   }
 
   public static <K,V> CollectionValuedMap<Iterable<K>, V> collectionValuedTrieMap(CollectionFactory<V> collectionFactory) {
     return new CollectionValuedMap<>(
-            TrieMapUtils.<K, Collection<V>>trieMapFactory(),
+            TrieMapUtils.trieMapFactory(),
             collectionFactory,
             false);
   }

@@ -18,6 +18,6 @@ public interface FileProcessor {
    *
    * @see FilePathProcessor for traversing directories
    */
-  public void processFile(File file);
+  void processFile(File file);
 
 }

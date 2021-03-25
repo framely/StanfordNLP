@@ -41,15 +41,15 @@ public interface DataSeries  {
   /** A logger for this class */
   Redwood.RedwoodChannels log = Redwood.channels(DataSeries.class);
 
-  public String     name();
-  public double     get(int i);         // SAFE! if index out of bounds, return (double) i
-  public int        size();
-  public DataSeries domain();           // can be null; then domain = 0, 1, 2, ...
+  String     name();
+  double     get(int i);         // SAFE! if index out of bounds, return (double) i
+  int        size();
+  DataSeries domain();           // can be null; then domain = 0, 1, 2, ...
 
 
   // .......................................................................
 
-  public static abstract class AbstractDataSeries implements DataSeries {
+  abstract class AbstractDataSeries implements DataSeries {
 
     private String   name;
     private DataSeries domain;
@@ -75,10 +75,10 @@ public interface DataSeries  {
 
   // .......................................................................
 
-  public static class FunctionDataSeries extends AbstractDataSeries {
+  class FunctionDataSeries extends AbstractDataSeries {
 
-    private ToIntFunction<Object> sizeFn;
-    private IntToDoubleFunction function;
+    private final ToIntFunction<Object> sizeFn;
+    private final IntToDoubleFunction function;
 
     public FunctionDataSeries(String name,
                               IntToDoubleFunction function,
@@ -126,7 +126,7 @@ public interface DataSeries  {
 
   // .......................................................................
 
-  public static class ArrayDataSeries extends AbstractDataSeries {
+  class ArrayDataSeries extends AbstractDataSeries {
 
     private double[] data;
 
@@ -167,7 +167,7 @@ public interface DataSeries  {
 
   // .......................................................................
 
-  public static class ListDataSeries extends AbstractDataSeries {
+  class ListDataSeries extends AbstractDataSeries {
 
     private List<Double> data;
 
@@ -310,9 +310,9 @@ public interface DataSeries  {
 
   // .......................................................................
 
-  public static class AverageDataSeries implements DataSeries {
+  class AverageDataSeries implements DataSeries {
 
-    private DataSeries[] components;
+    private final DataSeries[] components;
 
     public AverageDataSeries(DataSeries[] components) {
       if (components == null || components.length < 1)

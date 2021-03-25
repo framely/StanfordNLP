@@ -18,6 +18,6 @@ public interface ListProcessor<IN,OUT> {
    * Take a List (including a Sentence) of input, and return a
    * List that has been processed in some way.
    */
-  public List<OUT> process(List<? extends IN> list);
+  List<OUT> process(List<? extends IN> list);
 
 }

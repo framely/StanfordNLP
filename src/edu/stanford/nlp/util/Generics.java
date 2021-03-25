@@ -228,7 +228,7 @@ public class Generics  {
   }
 
   public static <K> Set<K> newIdentityHashSet() {
-    return Collections.newSetFromMap(Generics.<K, Boolean>newIdentityHashMap());
+    return Collections.newSetFromMap(Generics.newIdentityHashMap());
   }
 
   public static <K,V> WeakHashMap<K,V> newWeakHashMap() {

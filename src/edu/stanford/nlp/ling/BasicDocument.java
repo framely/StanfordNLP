@@ -396,7 +396,7 @@ public class BasicDocument<L> extends ArrayList<Word> implements Document<L, Wor
 
     // tries to instantiate by reflection, settles for direct instantiation
     try {
-      bd = ErasureUtils.<BasicDocument<L>>uncheckedCast(getClass().getDeclaredConstructor().newInstance());
+      bd = ErasureUtils.uncheckedCast(getClass().getDeclaredConstructor().newInstance());
     } catch (Exception e) {
       bd = new BasicDocument<>();
     }
@@ -407,7 +407,7 @@ public class BasicDocument<L> extends ArrayList<Word> implements Document<L, Wor
     bd.setTokenizerFactory(tokenizerFactory);
 
     // cast to the new output type
-    return ErasureUtils.<Document<L, Word, OUT>>uncheckedCast(bd);
+    return ErasureUtils.uncheckedCast(bd);
   }
 
   /**

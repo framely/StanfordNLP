@@ -7,7 +7,6 @@ import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.tokensregex.*;
 import edu.stanford.nlp.ling.tokensregex.matcher.TrieMap;
-import edu.stanford.nlp.sequences.SeqClassifierFlags;
 import edu.stanford.nlp.util.*;
 import edu.stanford.nlp.util.logging.Redwood;
 
@@ -182,7 +181,6 @@ public class TokensRegexNERAnnotator implements Annotator  {
     MATCH_ONE_TOKEN_PHRASE_ONLY }
   private final PosMatchType posMatchType;
   public static final PosMatchType DEFAULT_POS_MATCH_TYPE = PosMatchType.MATCH_AT_LEAST_ONE_TOKEN;
-  public static final String DEFAULT_BACKGROUND_SYMBOL = SeqClassifierFlags.DEFAULT_BACKGROUND_SYMBOL + ",MISC";
 
   public static PropertiesUtils.Property[] SUPPORTED_PROPERTIES = new PropertiesUtils.Property[]{
           new PropertiesUtils.Property("mapping", DefaultPaths.DEFAULT_REGEXNER_RULES, "List of mapping files to use, separated by commas or semi-colons."),
@@ -195,7 +193,6 @@ public class TokensRegexNERAnnotator implements Annotator  {
           new PropertiesUtils.Property("noDefaultOverwriteLabels", "", "Comma separated list of output types for which default NER labels are not overwritten.\n" +
                   " For these types, only if the matched expression has NER type matching the\n" +
                   " specified overwriteableType for the regex will the NER type be overwritten."),
-          new PropertiesUtils.Property("backgroundSymbol", DEFAULT_BACKGROUND_SYMBOL, "Comma separated list of NER labels to always replace."),
           new PropertiesUtils.Property("verbose", "false", ""),
   };
 
@@ -234,8 +231,6 @@ public class TokensRegexNERAnnotator implements Annotator  {
 
   public TokensRegexNERAnnotator(String name, Properties properties) {
     String prefix = ! StringUtils.isNullOrEmpty(name) ? name + '.': "";
-    String backgroundSymbol = properties.getProperty(prefix + "backgroundSymbol", DEFAULT_BACKGROUND_SYMBOL);
-    String[] backgroundSymbols = COMMA_DELIMITERS_PATTERN.split(backgroundSymbol);
     String mappingFiles = properties.getProperty(prefix + "mapping", DefaultPaths.DEFAULT_KBP_TOKENSREGEX_NER_SETTINGS);
     String[] mappings = processListMappingFiles(mappingFiles);
     String validPosRegex = properties.getProperty(prefix + "validpospattern");
@@ -320,7 +315,6 @@ public class TokensRegexNERAnnotator implements Annotator  {
     this.patternToEntry = Collections.unmodifiableMap(patternToEntry);
     Set<String> myLabels = Generics.newHashSet();
     // Can always override background or none.
-    Collections.addAll(myLabels, backgroundSymbols);
     myLabels.add(null);
     // Always overwrite labels
     for (Entry entry: entries) {

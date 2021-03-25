@@ -158,7 +158,7 @@ public class AnnotationLookup {
       } catch (Exception e) {
         throw new RuntimeException("Unexpected failure to instantiate - is your key class fancy?", e);
       }
-      valueCache.put((Class)key, type);
+      valueCache.put(key, type);
     }
     return type;
   }

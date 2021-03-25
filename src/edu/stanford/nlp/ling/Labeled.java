@@ -20,11 +20,11 @@ public interface Labeled<E> {
   /**
    * Returns the primary label for this Object, or null if none have been set.
    */
-  public E label();
+  E label();
 
   /**
    * Returns the complete list of labels for this Object, which may be empty.
    */
-  public Collection<E> labels();
+  Collection<E> labels();
 
 }

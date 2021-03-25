@@ -71,9 +71,7 @@ public class Match<K,V> implements HasInterval<Integer>
     if (begin != match.begin) return false;
     if (end != match.end) return false;
     if (matched != null ? !matched.equals(match.matched) : match.matched != null) return false;
-    if (value != null ? !value.equals(match.value) : match.value != null) return false;
-
-    return true;
+    return value != null ? value.equals(match.value) : match.value == null;
   }
 
   @Override

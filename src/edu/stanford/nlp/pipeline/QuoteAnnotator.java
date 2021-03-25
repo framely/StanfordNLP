@@ -1,6 +1,5 @@
 package edu.stanford.nlp.pipeline; 
 
-import edu.stanford.nlp.coref.CorefCoreAnnotations;
 import edu.stanford.nlp.ling.CoreAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -101,9 +100,6 @@ public class QuoteAnnotator implements Annotator  {
   // Whether or not to perform quote attribution
   public boolean ATTRIBUTE_QUOTES = true;
 
-  // A quote attribution annotator this annotator may use
-  public QuoteAttributionAnnotator quoteAttributionAnnotator;
-
   //TODO: add directed quote/unicode quote understanding capabilities.
   // will need substantial logic, probably, as quotation mark conventions
   // vary widely.
@@ -169,11 +165,6 @@ public class QuoteAnnotator implements Annotator  {
     if (VERBOSE) {
       timer = new Timing();
       log.info("Preparing quote annotator...");
-    }
-    if (ATTRIBUTE_QUOTES)  {
-      Properties relevantProperties = PropertiesUtils.extractPrefixedProperties(props,
-        "quote.attribution.");
-      quoteAttributionAnnotator = new QuoteAttributionAnnotator(relevantProperties);
     }
     if (VERBOSE) {
       timer.stop("done.");
@@ -287,9 +278,6 @@ public class QuoteAnnotator implements Annotator  {
       // add quotes to document
       setAnnotations(annotation, cmQuotes, cmQuotesUnclosed, "Setting quotes.");
     }
-    // if quote attribution is activated, run the quoteAttributionAnnotator
-    if (ATTRIBUTE_QUOTES)
-      quoteAttributionAnnotator.annotate(annotation);
   }
 
   private void setAnnotations(Annotation annotation,
@@ -723,7 +711,6 @@ public class QuoteAnnotator implements Annotator  {
           CoreAnnotations.TokenBeginAnnotation.class,
           CoreAnnotations.ValueAnnotation.class,
           CoreAnnotations.SentenceIndexAnnotation.class,
-          CorefCoreAnnotations.CorefChainAnnotation.class,
           CoreAnnotations.MentionsAnnotation.class,
           CoreAnnotations.EntityMentionIndexAnnotation.class,
           CoreAnnotations.CanonicalEntityMentionIndexAnnotation.class
@@ -739,13 +726,6 @@ public class QuoteAnnotator implements Annotator  {
       return new HashSet<>(Arrays.asList(
           CoreAnnotations.QuotationsAnnotation.class,
           CoreAnnotations.QuotationIndexAnnotation.class,
-          QuoteAttributionAnnotator.MentionAnnotation.class,
-          QuoteAttributionAnnotator.MentionBeginAnnotation.class,
-          QuoteAttributionAnnotator.MentionEndAnnotation.class,
-          QuoteAttributionAnnotator.MentionTypeAnnotation.class,
-          QuoteAttributionAnnotator.MentionSieveAnnotation.class,
-          QuoteAttributionAnnotator.SpeakerAnnotation.class,
-          QuoteAttributionAnnotator.SpeakerSieveAnnotation.class,
           CoreAnnotations.ParagraphIndexAnnotation.class
       ));
     } else {

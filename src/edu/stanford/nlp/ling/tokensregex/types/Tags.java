@@ -34,7 +34,7 @@ public class Tags implements Serializable {
   }
 
   public boolean hasTag(String tag) {
-    return (tags != null)? tags.containsKey(tag): false;
+    return tags != null && tags.containsKey(tag);
   }
 
   public void setTag(String tag, Value v) {
@@ -80,9 +80,7 @@ public class Tags implements Serializable {
 
     Tags tags1 = (Tags) o;
 
-    if (tags != null ? !tags.equals(tags1.tags) : tags1.tags != null) return false;
-
-    return true;
+    return tags != null ? tags.equals(tags1.tags) : tags1.tags == null;
   }
 
   @Override

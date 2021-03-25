@@ -1,6 +1,5 @@
 package edu.stanford.nlp.ling;
 
-import edu.stanford.nlp.ie.util.RelationTriple;
 import edu.stanford.nlp.util.*;
 
 import java.util.Calendar;
@@ -339,37 +338,7 @@ public class CoreAnnotations {
     }
   }
 
-  /**
-   * This indexes the beginning of a span of words, e.g., a constituent in a
-   * tree. See {@link edu.stanford.nlp.trees.Tree#indexSpans(int)}.
-   * This annotation counts tokens.
-   * It standardly indexes from 1 (like IndexAnnotation).  The reasons for
-   * this are: (i) Talking about the first word of a sentence is kind of
-   * natural, and (ii) We use index 0 to refer to an imaginary root in
-   * dependency output.
-   */
-  public static class BeginIndexAnnotation implements CoreAnnotation<Integer> {
-    @Override
-    public Class<Integer> getType() {
-      return Integer.class;
-    }
-  }
-
-  /**
-   * This indexes the end of a span of words, e.g., a constituent in a
-   * tree.  See {@link edu.stanford.nlp.trees.Tree#indexSpans(int)}. This annotation
-   * counts tokens.  It standardly indexes from 1 (like IndexAnnotation).
-   * The end index is not a fencepost: its value is equal to the
-   * IndexAnnotation of the last word in the span.
-   */
-  public static class EndIndexAnnotation implements CoreAnnotation<Integer> {
-    @Override
-    public Class<Integer> getType() {
-      return Integer.class;
-    }
-  }
-
-  /**
+ /**
    * This indicates that starting at this token, the sentence should not be ended until
    * we see a ForcedSentenceEndAnnotation.  Used to force the ssplit annotator
    * (eg the WordToSentenceProcessor) to keep tokens in the same sentence
@@ -2124,43 +2093,6 @@ public class CoreAnnotations {
     public Class<Integer> getType() { return Integer.class; }
   }
 
-  /**
-   * An annotation for a sentence tagged with its KBP relation.
-   * Attaches to a sentence.
-   *
-   * @see edu.stanford.nlp.pipeline.KBPAnnotator
-   */
-  public static class KBPTriplesAnnotation implements CoreAnnotation<List<RelationTriple>>{
-    @Override
-    public Class<List<RelationTriple>> getType() { return ErasureUtils.uncheckedCast(List.class); }
-  }
-
-  /**
-   * An annotation for the Wikipedia page (i.e., canonical name) associated with
-   * this token.
-   * This is the recommended annotation to use for entity linking that links to Wikipedia.
-   * Attaches to a token, as well as to a mention (see (@link MentionsAnnotation}).
-   *
-   * @see edu.stanford.nlp.pipeline.WikidictAnnotator
-   */
-  public static class WikipediaEntityAnnotation implements CoreAnnotation<String>{
-    @Override
-    public Class<String> getType() { return ErasureUtils.uncheckedCast(String.class); }
-  }
-
-
-  /**
-   * The CoreMap key identifying the annotation's text, as formatted by the
-   * {@link edu.stanford.nlp.naturalli.QuestionToStatementTranslator}.
-   *
-   * This is attached to {@link CoreLabel}s.
-   */
-  public static class StatementTextAnnotation implements CoreAnnotation<String> {
-    @Override
-    public Class<String> getType() {
-      return String.class;
-    }
-  }
 
   /**
    * The CoreMap key identifying an entity mention's potential gender.

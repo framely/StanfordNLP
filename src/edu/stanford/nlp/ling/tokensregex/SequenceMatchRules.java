@@ -235,7 +235,7 @@ public class SequenceMatchRules {
         Object obj = stringObjectEntry.getValue();
         switch (key) {
           case "name":
-            name = (String) Expressions.asObject(env, obj);
+            name = Expressions.asObject(env, obj);
             break;
           case "priority":
             priority = ((Number) Expressions.asObject(env, obj)).doubleValue();
@@ -259,13 +259,13 @@ public class SequenceMatchRules {
             }
             break;
           case "active":
-            active = (Boolean) Expressions.asObject(env, obj);
+            active = Expressions.asObject(env, obj);
             break;
           case "ruleType":
-            ruleType = (String) Expressions.asObject(env, obj);
+            ruleType = Expressions.asObject(env, obj);
             break;
           case "matchFindType":
-            matchFindType = SequenceMatcher.FindType.valueOf((String) Expressions.asObject(env, obj));
+            matchFindType = SequenceMatcher.FindType.valueOf(Expressions.asObject(env, obj));
             break;
           case "matchWithResults":
             matchWithResults = ((Boolean) Expressions.asObject(env, obj)).booleanValue();
@@ -327,7 +327,7 @@ public class SequenceMatchRules {
   }
 
   protected static AnnotationExtractRule createExtractionRule(Env env, Map<String,Object> attributes) {
-    String ruleType = (String) Expressions.asObject(env, attributes.get("ruleType"));
+    String ruleType = Expressions.asObject(env, attributes.get("ruleType"));
     if (ruleType == null && env != null) {
       ruleType = (String) env.getDefaults().get("ruleType");
     }
@@ -395,7 +395,7 @@ public class SequenceMatchRules {
   }
 
   public static AnnotationExtractRule createMultiTokenPatternRule(Env env, AnnotationExtractRule template, List<TokenSequencePattern> patterns) {
-    return MULTI_TOKEN_PATTERN_EXTRACT_RULE_CREATOR.create(env, template, patterns);
+    return MultiTokenPatternExtractRuleCreator.create(env, template, patterns);
   }
 
 
@@ -494,7 +494,7 @@ public class SequenceMatchRules {
       if (r.annotationField == null) { throw new IllegalArgumentException("Error creating composite rule: no annotation field"); }
       if (r.ruleType == null) { r.ruleType = TOKEN_PATTERN_RULE_TYPE; }
       //SequencePattern.PatternExpr expr = (SequencePattern.PatternExpr) attributes.get("pattern");
-      TokenSequencePattern expr = (TokenSequencePattern) Expressions.asObject(env, attributes.get("pattern"));
+      TokenSequencePattern expr = Expressions.asObject(env, attributes.get("pattern"));
       Expression action = Expressions.asExpression(env, attributes.get("action"));
       Expression result = Expressions.asExpression(env, attributes.get("result"));
       updateExtractRule(r, env, expr, action, result);
@@ -560,7 +560,7 @@ public class SequenceMatchRules {
       if (r.annotationField == null) { r.annotationField = r.tokensAnnotationField;  }
       if (r.ruleType == null) { r.ruleType = TOKEN_PATTERN_RULE_TYPE; }
       //SequencePattern.PatternExpr expr = (SequencePattern.PatternExpr) attributes.get("pattern");
-      TokenSequencePattern expr = (TokenSequencePattern) Expressions.asObject(env, attributes.get("pattern"));
+      TokenSequencePattern expr = Expressions.asObject(env, attributes.get("pattern"));
       Expression action = Expressions.asExpression(env, attributes.get("action"));
       Expression result = Expressions.asExpression(env, attributes.get("result"));
       updateExtractRule(r, env, expr, action, result);
@@ -669,7 +669,7 @@ public class SequenceMatchRules {
       AnnotationExtractRule r = super.create(env, attributes);
       if (r.annotationField == null) { r.annotationField = EnvLookup.getDefaultTextAnnotationKey(env);  }
       if (r.ruleType == null) { r.ruleType = TEXT_PATTERN_RULE_TYPE; }
-      String expr = (String) Expressions.asObject(env, attributes.get("pattern"));
+      String expr = Expressions.asObject(env, attributes.get("pattern"));
       Expression action = Expressions.asExpression(env, attributes.get("action"));
       Expression result = Expressions.asExpression(env, attributes.get("result"));
       updateExtractRule(r, env, expr, action, result);
